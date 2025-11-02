@@ -1,0 +1,84 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Hero Section -->
+    <div class="jumbotron p-5 text-center bg-light rounded-3 shadow-sm">
+        <h1 class="display-5 fw-bold">Gerencie EPIs com eficiência</h1>
+        <p class="lead mb-4">Controle empréstimos, cadastros de colaboradores e usuários, garantindo segurança e conformidade no canteiro de obras.</p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a class="btn btn-outline-primary btn-lg px-4 py-2 shadow-sm" href="{% url 'info' %}" role="button">
+                <i class="fas fa-info-circle me-2"></i> Saiba mais
+            </a>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Funcionalidades em Cards -->
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'page_app/img/imagem_2.jpg' %}" class="card-img-top" alt="Cadastro de colaboradores">
+                <div class="card-body">
+                    <h5 class="card-title">Cadastro de Colaboradores</h5>
+                    <p class="card-text">Registre todos os colaboradores da empresa e associe os EPIs necessários de forma rápida e intuitiva.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'page_app/img/imagem_3.jpg' %}" class="card-img-top" alt="Empréstimo de EPIs">
+                <div class="card-body">
+                    <h5 class="card-title">Empréstimo de EPIs</h5>
+                    <p class="card-text">Controle cada empréstimo de equipamento, garantindo que todos os colaboradores estejam protegidos e em conformidade com a norma.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'page_app/img/imagem_1.jpg' %}" class="card-img-top" alt="Relatórios e conformidade">
+                <div class="card-body">
+                    <h5 class="card-title">Relatórios e Conformidade</h5>
+                    <p class="card-text">Acompanhe o uso dos EPIs, gere relatórios detalhados e assegure que a empresa esteja dentro das normas regulamentadoras.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Benefícios -->
+    <div class="row align-items-center g-5">
+        <div class="col-md-6">
+            <h2>Por que usar nosso sistema?</h2>
+            <ul class="list-group list-group-flush mt-3 shadow-sm">
+                <li class="list-group-item">Segurança reforçada para todos os colaboradores.</li>
+                <li class="list-group-item">Controle completo e histórico de empréstimos de EPIs.</li>
+                <li class="list-group-item">Interface intuitiva, fácil de usar por qualquer funcionário.</li>
+                <li class="list-group-item">Atendimento às normas regulamentadoras de segurança.</li>
+            </ul>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="{% static 'page_app/img/imagem_4.jpg' %}" class="img-fluid rounded shadow" alt="Benefícios do sistema de EPIs">
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Call to action final -->
+    <div class="text-center py-5 bg-light rounded-3 shadow-sm">
+        <h3 class="fw-bold">Comece agora a gerenciar os EPIs da sua equipe!</h3>
+        <p class="lead">Aumente a segurança no canteiro de obras e garanta a conformidade da sua empresa.</p>
+        <a class="btn btn-warning btn-lg text-dark px-4 py-2 fw-semibold shadow-sm" href="{% url 'services' %}">
+            <i class="fas fa-envelope-open-text me-2"></i> Solicitar Serviços
+        </a>
+    </div>
+
+</div>
+{% endblock content %}

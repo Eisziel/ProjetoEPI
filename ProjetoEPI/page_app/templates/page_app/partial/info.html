@@ -1,0 +1,103 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Nossos Serviços{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 p-4">
+    <h1 class="mb-4 text-center fw-bold text-warning">Gestão de Equipamentos de Proteção Individual</h1>
+    <p class="lead text-center mb-5 text-secondary">
+        Nosso sistema foi desenvolvido para tornar o controle de EPIs mais eficiente, seguro e totalmente digital. 
+        Acompanhe os principais recursos que tornam sua empresa mais organizada e em conformidade com as normas de segurança.
+    </p>
+
+    <hr class="mb-5">
+
+    <!-- BLOCO 1 -->
+    <div class="row featurette align-items-center mb-5">
+        <div class="col-md-7">
+            <h2 class="featurette-heading fw-semibold">
+                <span class="text-light">Cadastro Inteligente de Colaboradores</span> 
+                <span class="text-muted d-block fs-5">Organização e praticidade</span>
+            </h2>
+            <p class="mt-3">
+                Armazene e gerencie informações de cada colaborador de forma simples. 
+                Cada funcionário possui um histórico detalhado de equipamentos emprestados, devoluções e prazos.
+            </p>
+        </div>
+        <div class="col-md-5 text-center">
+            <img src="{% static 'page_app/img/colaboradores.jpg' %}" class="img-fluid rounded shadow" alt="Cadastro de colaboradores">
+        </div>
+    </div>
+
+    <!-- BLOCO 2 -->
+    <div class="row featurette align-items-center mb-5">
+        <div class="col-md-7 order-md-2">
+            <h2 class="featurette-heading fw-semibold">
+                <span class="text-light">Controle de Estoque de EPIs</span>
+                <span class="text-muted d-block fs-5">Tudo sob controle</span>
+            </h2>
+            <p class="mt-3">
+                O sistema mantém o registro de cada equipamento disponível, facilitando o acompanhamento de estoque, 
+                validade dos EPIs e reposição necessária — garantindo segurança e conformidade.
+            </p>
+        </div>
+        <div class="col-md-5 order-md-1 text-center">
+            <img src="{% static 'page_app/img/estoque.jpg' %}" class="img-fluid rounded shadow" alt="Controle de estoque de EPIs">
+        </div>
+    </div>
+
+    <!-- BLOCO 3 -->
+    <div class="row featurette align-items-center mb-5">
+        <div class="col-md-7">
+            <h2 class="featurette-heading fw-semibold">
+                <span class="text-light">Empréstimo e Devolução Rápidos</span>
+                <span class="text-muted d-block fs-5">Agilidade e rastreabilidade</span>
+            </h2>
+            <p class="mt-3">
+                Registre empréstimos e devoluções de forma prática. 
+                Cada movimentação é salva no sistema, garantindo rastreabilidade e reduzindo perdas de equipamentos.
+            </p>
+        </div>
+        <div class="col-md-5 text-center">
+            <img src="{% static 'page_app/img/emprestimo.jpg' %}" class="img-fluid rounded shadow" alt="Empréstimo de equipamentos">
+        </div>
+    </div>
+
+    <!-- BLOCO 4 -->
+    <div class="row featurette align-items-center mb-5">
+        <div class="col-md-7 order-md-2">
+            <h2 class="featurette-heading fw-semibold">
+                <span class="text-light">Relatórios e Conformidade</span>
+                <span class="text-muted d-block fs-5">Tudo dentro da norma</span>
+            </h2>
+            <p class="mt-3">
+                Gere relatórios completos sobre uso e histórico de EPIs, 
+                atendendo às exigências da <strong>NR-6</strong> e outras normas regulamentadoras de segurança do trabalho.
+            </p>
+        </div>
+        <div class="col-md-5 order-md-1 text-center">
+            <img src="{% static 'page_app/img/relatorios.jpg' %}" class="img-fluid rounded shadow" alt="Relatórios de segurança">
+        </div>
+    </div>
+
+    <!-- Call to action final -->
+ <hr class="my-5">
+
+ <div class="text-center py-5 bg-light rounded-3 shadow-sm mt-5">
+    <h3 class="fw-bold mb-3">Ficou interessado?</h3>
+    <p class="lead text-muted mb-4">
+        Agende uma demonstração e veja como nosso sistema pode transformar a gestão de EPIs da sua empresa!
+    </p>
+ <a class="btn btn-warning btn-lg text-dark px-4 py-2 fw-semibold shadow-sm" href="{% url 'services' %}">
+            <i class="fas fa-envelope-open-text me-2"></i> Solicitar Serviços
+        </a>
+    </div>
+ </div>
+ <div class="text-center">
+    <p class="mb-3">Ainda tem dúvidas? <a href="{% url 'contato' %}" class="fw-bold">Fale com a gente</a></p>
+    <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i> ← Voltar à página inicial</a>
+  </div>
+
+</div>
+{% endblock content %}

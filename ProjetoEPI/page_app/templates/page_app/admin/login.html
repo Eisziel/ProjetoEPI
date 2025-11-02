@@ -1,0 +1,39 @@
+{% extends "page_app/global/base.html" %}
+{% load static %}
+
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h4 class="card-title mb-3 text-center">Entrar</h4>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Usuário</label>
+              <input class="form-control" name="username" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Senha</label>
+              <input class="form-control" name="password" type="password" required>
+            </div>
+
+            <div class="d-grid">
+              <button class="btn btn-primary" type="submit">Entrar</button>
+            </div>
+          </form>
+
+          <hr>
+          <p class="text-center small mb-0">
+            Não possui uma conta? <a href="{% url 'cadastrar_colaborador' %}">Cadastre-se aqui</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

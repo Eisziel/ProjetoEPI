@@ -1,0 +1,18 @@
+{% extends "page_app/global/base.html" %}
+{% load static %}
+
+{% block title %}Obrigado{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5 text-center">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card p-4 shadow-sm">
+        <h3 class="text-success">Obrigado!</h3>
+        <p class="lead">Seu cadastro foi recebido com sucesso. Em breve entraremos em contato.</p>
+        <a href="{% url 'index' %}" class="btn btn-primary mt-3">Voltar para a Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

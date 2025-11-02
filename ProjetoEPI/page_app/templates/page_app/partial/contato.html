@@ -1,0 +1,203 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Contato{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+
+  {# --- Alerta dinâmico quando a página for aberta a partir de um plano/ação --- #}
+  {% if request.GET.plano %}
+    {% with plano=request.GET.plano acao=request.GET.acao %}
+      <div class="alert alert-info shadow-sm mb-4" role="alert">
+        {% if acao == "demo" %}
+          <strong>Você está solicitando uma demonstração do plano:</strong>
+        {% elif acao == "contratar" %}
+          <strong>Você demonstrou interesse em contratar o plano:</strong>
+        {% else %}
+          <strong>Você está solicitando informações sobre o plano:</strong>
+        {% endif %}
+        <div class="mt-2">
+          <span class="h5">{{ plano }}</span>
+        </div>
+        <div class="mt-2 small text-muted">
+          Preencha o formulário abaixo que nossa equipe entrará em contato.
+        </div>
+      </div>
+    {% endwith %}
+  {% endif %}
+
+  <!-- Título e descrição -->
+  <div class="text-center mb-5">
+      <h1 class="fw-bold text-warning">Fale Conosco</h1>
+      <p class="lead text-muted">
+          Estamos prontos para ajudar sua empresa a garantir mais segurança e controle no uso de EPIs.
+          Entre em contato pelos canais abaixo ou envie uma mensagem diretamente pelo formulário.
+      </p>
+  </div>
+
+  <!-- Cartões de contato -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center border-warning">
+        <div class="card-body">
+          <i class="far fa-envelope fa-2x mb-3 text-warning"></i>
+          <h5 class="card-title">E-mail</h5>
+          <p class="card-text">digo.m.jlle@gmail.com</p>
+          <a href="mailto:digo.m.jlle@gmail.com" class="btn btn-outline-warning btn-sm">Enviar e-mail</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center border-success">
+        <div class="card-body">
+          <i class="fab fa-whatsapp fa-2x mb-3 text-success"></i>
+          <h5 class="card-title">WhatsApp</h5>
+          <p class="card-text">(47) 99728-3117</p>
+          <a href="https://wa.me/5547997283117?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20sistema%20de%20gestão%20de%20EPIs." target="_blank" class="btn btn-success btn-sm">Enviar mensagem</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center border-dark">
+        <div class="card-body">
+          <i class="fab fa-github fa-2x mb-3 text-dark"></i>
+          <h5 class="card-title">GitHub</h5>
+          <p class="card-text">ProjetoEPI</p>
+          <a href="https://github.com/renaton2006-dev/ProjetoEPI" target="_blank" class="btn btn-dark btn-sm">Ver projeto</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário de contato -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <h2 class="fw-bold mb-4 text-center">Envie sua mensagem</h2>
+
+      <form action="#" method="POST" class="p-4 shadow rounded bg-light">
+        {% csrf_token %}
+
+        {# se veio plano/acao, incluímos como hidden para o backend processar #}
+        <input type="hidden" name="plano" value="{{ request.GET.plano|default:'' }}">
+        <input type="hidden" name="acao" value="{{ request.GET.acao|default:'' }}">
+
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" placeholder="Seu nome" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Seu e-mail" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="telefone" class="form-label">Telefone (opcional)</label>
+          <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(xx) xxxxx-xxxx">
+        </div>
+
+        <div class="mb-3">
+          <label for="mensagem" class="form-label">Mensagem</label>
+          <textarea class="form-control" id="mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem aqui..." required></textarea>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-warning fw-bold px-4">Enviar Mensagem</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- Dúvidas frequentes -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <h2 class="fw-bold mb-4 text-center">Dúvidas Frequentes</h2>
+      <div class="accordion shadow-sm" id="faqAccordion">
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq1">
+            <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+              O sistema é gratuito?
+            </button>
+          </h2>
+          <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Sim, o sistema possui uma versão gratuita para testes. Você pode solicitar uma demonstração e conhecer todos os recursos antes de adotar.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq2">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+              Posso cadastrar quantos colaboradores quiser?
+            </button>
+          </h2>
+          <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Depende do plano. Nossa versão Business e Enterprise suportam cadastros ilimitados; no Starter há limite. Consulte os planos na aba Serviços.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq3">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+              O sistema gera relatórios automáticos?
+            </button>
+          </h2>
+          <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Sim — relatórios de controle de EPIs e conformidade podem ser gerados automaticamente e exportados em PDF (recursos variam por plano).
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq4">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+              Como posso solicitar suporte?
+            </button>
+          </h2>
+          <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Você pode entrar em contato pelo WhatsApp ou e-mail informados acima. Nossa equipe responde em até 24 horas úteis.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- Localização -->
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <h2 class="fw-bold mb-4 text-center">Nossa Localização</h2>
+      <p class="text-center text-muted mb-4">
+        Rua Arno Waldemar Döhler, 957 – Zona Industrial Norte<br>
+        Joinville / SC – CEP 89219-510
+      </p>
+      <div class="ratio ratio-16x9 shadow rounded">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.071147184763!2d-48.85607437529053!3d-26.25935421622114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94deafbe3ebf0c05%3A0x624c0303ba7bf8a7!2sSENAI%20Joinville%20Norte%20I%20-%20UniSENAI!5e0!3m2!1spt-BR!2sbr!4v1762007611706!5m2!1spt-BR!2sbr" 
+            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <p class="mb-3">Ainda tem dúvidas? <a href="{% url 'contato' %}" class="fw-bold">Fale com a gente</a></p>
+    <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i> ← Voltar à página inicial</a>
+  </div>
+
+</div>
+{% endblock content %}

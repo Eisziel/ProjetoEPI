@@ -1,0 +1,24 @@
+# Arquivos de sistema
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+
+# Ambiente virtual
+venv/
+.env
+.DS_Store
+
+# Django stuff
+/media/
+staticfiles/
+*.pot
+*.mo
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# Backup / local configs
+*.bak
+*.swp

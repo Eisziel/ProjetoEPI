@@ -1,0 +1,103 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Serviços / Planos{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-bold">Planos e Serviços</h1>
+    <p class="lead text-muted">Escolha o plano certo para sua empresa. Agende uma demonstração e conheça tudo na prática.</p>
+  </div>
+
+  <div class="row g-4 justify-content-center">
+    {% if planos %}
+      {% for plano in planos %}
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm position-relative {% if plano.popular %}border-3 border-warning{% endif %}">
+          {% if plano.popular %}
+            <div class="ribbon-popular">Mais popular</div>
+          {% endif %}
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold">{{ plano.nome }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ plano.preco }}</h6>
+            <p class="card-text">{{ plano.desc }}</p>
+
+            <ul class="list-unstyled mt-2 mb-3">
+              {% for f in plano.features %}
+              <li class="mb-1"><i class="fas fa-check me-2 text-success"></i>{{ f }}</li>
+              {% endfor %}
+            </ul>
+
+            <div class="mb-3">
+              <strong>Impacto / Benefícios:</strong>
+              <ul class="small mb-0">
+                {% for i in plano.impact %}
+                <li>{{ i }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="mt-auto d-grid gap-2">
+              <!-- solicitar demonstração (pré-fill via query string) -->
+              <a href="{% url 'contato' %}?plano={{ plano.nome|urlencode }}&acao=demo"
+                 class="btn btn-lg btn-primary btn-cta fw-semibold">
+                Solicitar demonstração
+              </a>
+
+              <!-- contratar / falar com vendas -->
+              <a href="{% url 'contato' %}?plano={{ plano.nome|urlencode }}&acao=contratar"
+                 class="btn btn-outline-dark btn-sm">
+                Contratar / Falar com vendas
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-info text-center">
+          Ainda não há planos disponíveis no momento. Caso queira, <a href="{% url 'contato' %}">fale com a gente</a>.
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <hr class="my-5">
+
+  <div class="text-center">
+    <p class="mb-3">Ainda tem dúvidas? <a href="{% url 'contato' %}" class="fw-bold">Fale com a gente</a></p>
+    <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i> ← Voltar à página inicial</a>
+  </div>
+</div>
+
+{# CSS local opcional (se você prefere centralizar no CSS global, copie para seu arquivo .css) #}
+<style>
+/* ribbon "Mais popular" */
+.ribbon-popular{
+  position:absolute;
+  top:12px;
+  right:-36px;
+  transform: rotate(45deg);
+  background: #f7b500;
+  color:#222;
+  padding:6px 56px;
+  font-weight:700;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  font-size:0.85rem;
+}
+/* botão CTA mais chamativo */
+.btn-cta{
+  background: linear-gradient(90deg,#0d6efd,#0069d9);
+  border:none;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(13,110,253,0.18);
+}
+.btn-cta:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(13,110,253,0.22);
+  text-decoration:none;
+}
+</style>
+{% endblock content %}
