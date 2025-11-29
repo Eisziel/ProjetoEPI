@@ -1,0 +1,60 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Excluir Equipamento{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        Confirmar exclusão de equipamento
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <p>
+                        Tem certeza que deseja excluir o equipamento abaixo?
+                    </p>
+
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">
+                            <strong>Nome:</strong> {{ equipamento.nome }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Código:</strong> {{ equipamento.codigo }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Categoria:</strong> {{ equipamento.categoria }}
+                        </li>
+                    </ul>
+
+                    <p class="text-muted small mb-4">
+                        Esta ação é permanente e não poderá ser desfeita.
+                    </p>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'listar_equipamentos' %}" class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash-can me-1"></i>
+                                Sim, excluir equipamento
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

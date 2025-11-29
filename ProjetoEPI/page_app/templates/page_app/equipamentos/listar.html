@@ -1,0 +1,72 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Lista de Equipamentos{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">
+            <i class="fa-solid fa-boxes-stacked me-2"></i>
+            Lista de Equipamentos
+        </h3>
+
+        <a href="{% url 'cadastrar_equipamento' %}" class="btn btn-success">
+            <i class="fa-solid fa-plus me-1"></i> Novo Equipamento
+        </a>
+    </div>
+
+    <!-- 🔎 Busca -->
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="busca"
+                   placeholder="Buscar por nome ou código"
+                   value="{{ busca }}"
+                   class="form-control">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-dark w-100">
+                <i class="fa-solid fa-magnifying-glass me-1"></i> Buscar
+            </button>
+        </div>
+    </form>
+
+    <div class="table-responsive shadow-sm">
+        <table class="table table-striped table-hover bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Código</th>
+                    <th>CA</th>
+                    <th>Estoque</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for eq in equipamentos %}
+                <tr>
+                    <td>{{ eq.nome }}</td>
+                    <td>{{ eq.codigo }}</td>
+                    <td>{{ eq.ca|default:"—" }}</td>
+                    <td>{{ eq.quantidade_estoque }}</td>
+
+                    <td class="text-center">
+                        <a href="{% url 'editar_equipamento' eq.id %}" class="btn btn-sm btn-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="{% url 'excluir_equipamento' eq.id %}" class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5" class="text-center text-muted py-3">Nenhum equipamento encontrado.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

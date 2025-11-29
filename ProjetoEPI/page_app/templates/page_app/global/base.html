@@ -1,4 +1,5 @@
 {% load static %}
+{% load tz %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -19,10 +20,16 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
         color: #fff;
         font-family: "Poppins", sans-serif;
+      }
+
+      main.app-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
 
       .logo-container img {
@@ -67,6 +74,9 @@
       footer {
         position: fixed;
         bottom: 10px;
+        left: 0;
+        right: 0;
+        text-align: center;
         color: rgba(255, 255, 255, 0.7);
         font-size: 0.9rem;
       }
@@ -74,19 +84,85 @@
 </head>
 
 <body>
-  <div class="logo-container text-center">
-    <img src="{% static 'page_app/img/logo.png' %}" alt="Logo do Sistema">
-  </div>
 
-  <div class="welcome-text">
-    <h1>Bem-vindo à Gestão de EPIs</h1>
-    <p>Organize, gerencie e proteja sua equipe com eficiência.</p>
-  </div>
+  <!-- 🔹 NAVBAR TOPO (com Entrar / Sair) -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+        <img src="{% static 'page_app/img/logo.png' %}" alt="Logo" class="rounded-circle me-2" width="35" height="35">
+        <span class="fw-bold text-warning">Gestão de EPIs</span>
+      </a>
 
-  {% block content %}{% endblock %}
+      <!-- Toggle mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBase"
+              aria-controls="navbarBase" aria-expanded="false" aria-label="Alternar navegação">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <footer class="text-center">
-    © {{ now|date:"Y" }} 2025 Desenvolvido por estudantes de Desenvolvimento de Sistemas | SesiSenai
+      <div class="collapse navbar-collapse" id="navbarBase">
+        <ul class="navbar-nav me-auto">
+          <!-- Se quiser, pode colocar links básicos aqui depois -->
+        </ul>
+
+        <!-- Lado direito: login / logout baseado na SESSÃO do UsuarioSistema -->
+        <ul class="navbar-nav ms-auto">
+          {% if request.session.usuario_id %}
+            <li class="nav-item d-flex align-items-center me-2">
+              <span class="navbar-text text-light">
+                <i class="fa-solid fa-user-gear me-1"></i>
+                {{ request.session.usuario_nome }}
+              </span>
+            </li>
+            <li class="nav-item me-2">
+              <a href="{% url 'perfil_usuario' %}" class="btn btn-outline-light btn-sm">
+                <i class="fa-solid fa-id-badge me-1"></i> Meu perfil
+              </a>
+            </li>
+            <li class="nav-item me-2">
+              <a href="{% url 'configuracoes_usuario' %}" class="btn btn-outline-light btn-sm">
+                <i class="fa-solid fa-sliders me-1"></i> Configurações
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-danger btn-sm fw-semibold px-3" href="{% url 'logout_usuario' %}">
+                <i class="fas fa-sign-out-alt me-1"></i> Sair
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item me-2">
+              <a class="btn btn-outline-light btn-sm fw-semibold px-3" href="{% url 'entrar' %}">
+                <i class="fas fa-sign-in-alt me-1"></i> Entrar
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-warning btn-sm text-dark fw-semibold px-3" href="{% url 'cadastrar_usuario' %}">
+                <i class="fas fa-user-plus me-1"></i> Criar conta
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🔹 CONTEÚDO CENTRAL -->
+  <main class="app-main">
+    <div class="logo-container text-center">
+      <img src="{% static 'page_app/img/logo.png' %}" alt="Logo do Sistema">
+    </div>
+
+    <div class="welcome-text">
+      <h1>Bem-vindo à Gestão de EPIs</h1>
+      <p>Organize, gerencie e proteja sua equipe com eficiência.</p>
+    </div>
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- 🔹 FOOTER -->
+  <footer>
+    © {% now "Y" %} Desenvolvido por estudantes de Desenvolvimento de Sistemas | SesiSenai
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

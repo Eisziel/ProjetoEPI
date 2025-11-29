@@ -1,0 +1,91 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Relatório por Colaborador{% endblock title %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">
+            <i class="fa-solid fa-file-lines me-2"></i>
+            Relatório de EPIs por Colaborador
+        </h3>
+    </div>
+
+    <!-- 🔎 Formulário de busca por nome do colaborador -->
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-5">
+            <input type="text"
+                   name="nome"
+                   value="{{ nome_busca }}"
+                   class="form-control"
+                   placeholder="Digite o nome do colaborador">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-outline-dark w-100" type="submit">
+                <i class="fa-solid fa-magnifying-glass me-1"></i> Buscar
+            </button>
+        </div>
+    </form>
+
+    {% if movimentos %}
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped table-hover align-middle bg-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Colaborador</th>
+                        <th>Equipamento</th>
+                        <th>Data Empréstimo</th>
+                        <th>Data Prevista Devolução</th>
+                        <th>Data Devolução</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in movimentos %}
+                        <tr>
+                            <td>{{ mov.colaborador.nome }}</td>
+                            <td>{{ mov.equipamento.nome }}</td>
+                            <td>{{ mov.data_entrega|date:"d/m/Y H:i" }}</td>
+                            <td>{{ mov.data_prevista_devolucao|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                {% if mov.data_devolucao %}
+                                    {{ mov.data_devolucao|date:"d/m/Y H:i" }}
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if mov.status == "EMPRESTADO" %}
+                                    <span class="badge bg-primary">Emprestado</span>
+                                {% elif mov.status == "EM_USO" %}
+                                    <span class="badge bg-info text-dark">Em uso</span>
+                                {% elif mov.status == "FORNECIDO" %}
+                                    <span class="badge bg-success">Fornecido</span>
+                                {% elif mov.status == "DEVOLVIDO" %}
+                                    <span class="badge bg-secondary">Devolvido</span>
+                                {% elif mov.status == "DANIFICADO" %}
+                                    <span class="badge bg-warning text-dark">Danificado</span>
+                                {% elif mov.status == "PERDIDO" %}
+                                    <span class="badge bg-danger">Perdido</span>
+                                {% else %}
+                                    <span class="badge bg-light text-dark">Indefinido</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Nenhum registro encontrado
+            {% if nome_busca %}
+                para o colaborador <strong>{{ nome_busca }}</strong>.
+            {% else %}
+                para os filtros informados.
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

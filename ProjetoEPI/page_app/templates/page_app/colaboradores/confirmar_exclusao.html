@@ -1,0 +1,44 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}Confirmar Exclusão{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        Confirmar exclusão de colaborador
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Tem certeza que deseja excluir o colaborador
+                        <strong>{{ colaborador.nome }}</strong>?
+                    </p>
+                    <p class="text-muted small mb-4">
+                        Esta ação é permanente e não poderá ser desfeita.
+                    </p>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'listar_colaboradores' %}" class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash-can me-1"></i>
+                                Sim, excluir colaborador
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

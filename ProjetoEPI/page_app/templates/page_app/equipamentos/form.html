@@ -1,0 +1,62 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <h3 class="mb-3">
+        <i class="fa-solid fa-vest-patches me-2"></i>
+        {{ titulo }}
+    </h3>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nome</label>
+                        {{ form.nome }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Código</label>
+                        {{ form.codigo }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Descrição</label>
+                    {{ form.descricao }}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">CA</label>
+                        {{ form.ca }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Quantidade em estoque</label>
+                        {{ form.quantidade_estoque }}
+                    </div>
+                </div>
+
+                <button class="btn btn-warning text-dark fw-semibold">
+                    <i class="fa-solid fa-floppy-disk me-1"></i> Salvar
+                </button>
+
+                <a href="{% url 'listar_equipamentos' %}" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar
+                </a>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

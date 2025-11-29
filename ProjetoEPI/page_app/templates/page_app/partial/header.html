@@ -3,8 +3,9 @@
 <header>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm fixed-top border-bottom border-warning">
     <div class="container-fluid">
+
       <!-- Logo -->
-      <a class="navbar-brand d-flex align-items-center" href="/">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
         <img src="{% static 'page_app/img/logo.png' %}" alt="Logo" class="rounded-circle me-2" width="35" height="35">
         <span class="fw-bold text-warning">Gestão de EPIs</span>
       </a>
@@ -16,28 +17,58 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarCollapse">
+
         <!-- Links centrais -->
         <ul class="navbar-nav mx-auto mb-2 mb-md-0">
-          <li class="nav-item"><a class="btn btn-outline-light fw-semibold px-3"{% if request.path == '/' %}active{% endif %}" href="/">Início</a></li>
-          <li class="nav-item"><a class="btn btn-outline-light fw-semibold px-3" {% if request.path == '/info/' %}active{% endif %}" href="/info/">Recursos</a></li>
-          <li class="nav-item"><a class="btn btn-outline-light fw-semibold px-3" {% if request.path == '/services/' %}active{% endif %}" href="/services/">Serviços</a></li>
-          <li class="nav-item"><a class="btn btn-outline-light fw-semibold px-3" {% if request.path == '/contato/' %}active{% endif %}" href="/contato/">Contato</a></li>
+
+          <li class="nav-item">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/' %}active{% endif %}"
+               href="{% url 'index' %}">
+              Início
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/info/' %}active{% endif %}"
+               href="{% url 'info' %}">
+              Recursos
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/services/' %}active{% endif %}"
+               href="{% url 'services' %}">
+              Serviços
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/contato/' %}active{% endif %}"
+               href="{% url 'contato' %}">
+              Contato
+            </a>
+          </li>
+
         </ul>
 
         <!-- Botões à direita -->
         <ul class="navbar-nav ms-auto">
-          {% if user.is_authenticated %}
-            <!-- ADM logado -->
-            <li class="nav-item me-2">
-              <a class="btn btn-success text-light fw-semibold px-3" href="{% url 'criar_colaborador' %}">
-                <i class="fas fa-user-plus me-1"></i> Cadastrar Colaborador
-              </a>
+
+          {% if request.session.usuario_id %}
+            <!-- Usuário logado -->
+            <li class="nav-item me-3">
+              <span class="navbar-text text-light fw-semibold">
+                <i class="fa-solid fa-user-gear me-1"></i>
+                {{ request.session.usuario_nome }}
+              </span>
             </li>
+
             <li class="nav-item">
-              <a class="btn btn-danger fw-semibold px-3" href="{% url 'logout' %}">
+              <a class="btn btn-danger fw-semibold px-3" href="{% url 'logout_usuario' %}">
                 <i class="fas fa-sign-out-alt me-1"></i> Sair
               </a>
             </li>
+
           {% else %}
             <!-- Visitante -->
             <li class="nav-item me-2">
@@ -45,13 +76,16 @@
                 <i class="fas fa-sign-in-alt me-1"></i> Entrar
               </a>
             </li>
+
             <li class="nav-item">
               <a class="btn btn-warning text-dark fw-semibold px-3" href="/admin/">
-                <i class="fas fa-user-shield me-1"></i> Acessar Conta Administrativa
+                <i class="fas fa-user-shield me-1"></i> Conta Administrativa
               </a>
             </li>
+
           {% endif %}
         </ul>
+
       </div>
     </div>
   </nav>

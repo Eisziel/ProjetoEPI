@@ -1,39 +1,254 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap via CDN (somente versão 5.3) -->
+    <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Font Awesome via CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <title>{% block title %}Sistema de Gestão de EPIs{% endblock title %}</title>
 
+    <style>
+        body {
+            background-color: #f5f5f5;
+            /* Espaço para não ficar atrás do header fixo */
+            padding-top: 70px;
+        }
 
-    <title>{% block title %}{% endblock title %}</title>
+        /* Barra lateral */
+        #wrapper {
+            min-height: 100vh;
+        }
+
+        #sidebar-wrapper {
+            width: 260px;
+        }
+
+        #sidebar-wrapper .list-group-item {
+            border: none;
+        }
+
+        #sidebar-wrapper .list-group-item:hover {
+            background-color: #343a40;
+            color: #ffc107;
+        }
+    </style>
 </head>
 
-<body class="bg-light">
-    <!-- Header -->
-    {% include "page_app/partial/header.html" %}
+<body>
 
-    <!-- Seção de boas-vindas -->
-    {% include "page_app/partial/welcome.html" %}
+<!-- 🔹 HEADER -->
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm fixed-top border-bottom border-warning">
+    <div class="container-fluid">
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+        <img src="{% static 'page_app/img/logo.png' %}" alt="Logo" class="rounded-circle me-2" width="35" height="35">
+        <span class="fw-bold text-warning">Gestão de EPIs</span>
+      </a>
 
-    <!-- Conteúdo específico de cada página -->
-    {% block content %}{% endblock content %}
+      <!-- Toggle mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+              aria-controls="navbarCollapse" aria-expanded="false" aria-label="Alternar navegação">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!-- Footer -->
-    {% include "page_app/partial/footer.html" %}
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        
+        <!-- Links centrais -->
+        <ul class="navbar-nav mx-auto mb-2 mb-md-0">
 
-    <!-- Scripts do Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   
+          <li class="nav-item me-2">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/' %}active{% endif %}"
+               href="{% url 'index' %}">
+               Início
+            </a>
+          </li>
+
+          <li class="nav-item me-2">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/info/' %}active{% endif %}"
+               href="{% url 'info' %}">
+               Recursos
+            </a>
+          </li>
+
+          <li class="nav-item me-2">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/services/' %}active{% endif %}"
+               href="{% url 'services' %}">
+               Serviços
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-outline-light fw-semibold px-3 {% if request.path == '/contato/' %}active{% endif %}"
+               href="{% url 'contato' %}">
+               Contato
+            </a>
+          </li>
+        </ul>
+
+        <!-- Botões lado direito (usando sessão do UsuarioSistema) -->
+        <ul class="navbar-nav ms-auto">
+
+          {% if request.session.usuario_id %}
+            <!-- Usuário do sistema logado -->
+            <li class="nav-item me-2">
+              <span class="navbar-text text-light me-2">
+                <i class="fa-solid fa-user-gear me-1"></i>
+                {{ request.session.usuario_nome }}
+              </span>
+            </li>
+
+            <li class="nav-item">
+              <a class="btn btn-danger fw-semibold px-3" href="{% url 'logout_usuario' %}">
+                <i class="fas fa-sign-out-alt me-1"></i> Sair
+              </a>
+            </li>
+
+          {% else %}
+            <!-- Visitantes -->
+            <li class="nav-item me-2">
+              <a class="btn btn-outline-light fw-semibold px-3" href="{% url 'entrar' %}">
+                <i class="fas fa-sign-in-alt me-1"></i> Entrar
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="btn btn-warning text-dark fw-semibold px-3" href="/admin/">
+                <i class="fas fa-user-shield me-1"></i> Conta Administrativa
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- 🔹 LAYOUT - SIDEBAR + CONTEÚDO -->
+<div class="d-flex" id="wrapper">
+
+    <!-- 🔹 MENU LATERAL FIXO -->
+    <div class="border-end bg-dark text-light" id="sidebar-wrapper">
+
+        <div class="sidebar-heading border-bottom py-3 text-center">
+            <i class="fa-solid fa-helmet-safety me-2 text-warning"></i>
+            Gestão de EPIs
+        </div>
+
+        <!-- 🔹 BLOCO DO USUÁRIO NA LATERAL -->
+        <div class="p-3 border-bottom d-flex align-items-center bg-dark">
+            <img src="{% static 'page_app/img/usuario_fake.jpg' %}"
+                 alt="Usuário"
+                 width="50"
+                 height="50"
+                 class="rounded-circle me-2">
+
+            <div class="dropdown">
+                <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-light"
+                   href="#"
+                   id="userMenuSide"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <span class="me-1 text-muted small">Usuário:</span>
+                    <strong>
+                      {% if request.session.usuario_nome %}
+                          {{ request.session.usuario_nome }}
+                      {% else %}
+                          Klein Moretti
+                      {% endif %}
+                    </strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="userMenuSide">
+                    <li><a class="dropdown-item" href="{% url 'perfil_usuario' %}">Meu perfil</a></li>
+                    <li><a class="dropdown-item" href="{% url 'configuracoes_usuario' %}">Configurações</a></li>
+                    <li><a class="dropdown-item" href="{% url 'ajuda_usuario' %}">Ajuda</a></li>
+
+                    {% if request.session.usuario_id %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{% url 'logout_usuario' %}">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i>
+                                Sair da conta
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="list-group list-group-flush">
+
+            <a href="{% url 'criar_colaborador' %}"
+               class="list-group-item list-group-item-action bg-dark text-light border-0
+                      {% if request.path == '/colaboradores/novo/' %}active bg-warning text-white{% endif %}">
+                <i class="fa-solid fa-user-plus me-2 text-warning"></i> Cadastro de Colaboradores
+            </a>
+
+            <a href="{% url 'listar_colaboradores' %}"
+               class="list-group-item list-group-item-action bg-dark text-light border-0
+                      {% if request.path == '/colaboradores/' %}active bg-warning text-white{% endif %}">
+                <i class="fa-solid fa-users me-2 text-warning"></i> Lista de Colaboradores
+            </a>
+
+            <a href="{% url 'cadastrar_equipamento' %}"
+               class="list-group-item list-group-item-action bg-dark text-light border-0
+                      {% if request.path == '/equipamentos/novo/' %}active bg-warning text-white{% endif %}">
+                <i class="fa-solid fa-vest-patches me-2 text-warning"></i> Cadastro de Equipamentos
+            </a>
+
+            <a href="{% url 'listar_equipamentos' %}"
+               class="list-group-item list-group-item-action bg-dark text-light border-0
+                      {% if request.path == '/equipamentos/' %}active bg-warning text-white{% endif %}">
+                <i class="fa-solid fa-boxes-stacked me-2 text-warning"></i> Lista de Equipamentos
+            </a>
+
+            <a href="{% url 'controlar_epi' %}"
+               class="list-group-item list-group-item-action bg-dark text-light border-0
+                      {% if request.path == '/epi/controlar/' %}active bg-warning text-white{% endif %}">
+                <i class="fa-solid fa-list-check me-2 text-warning"></i> Controle de EPI
+            </a>
+
+            <a href="{% url 'relatorio_colaborador' %}"
+               class="list-group-item list-group-item-action bg-dark text-light border-0
+                      {% if request.path == '/relatorios/colaborador/' %}active bg-warning text-white{% endif %}">
+                <i class="fa-solid fa-file-lines me-2 text-warning"></i> Relatórios
+            </a>
+        </div>
+    </div>
+
+
+    <!-- 🔹 CONTEÚDO PRINCIPAL -->
+    <div id="page-content-wrapper" class="flex-grow-1">
+
+        <main class="container-fluid py-4">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                        {{ message }}
+                        <button class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% include "page_app/partial/welcome.html" %}
+
+            {% block content %}{% endblock content %}
+
+            {% include "page_app/partial/footer.html" %}
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
-
