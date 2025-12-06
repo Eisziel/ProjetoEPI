@@ -1,0 +1,147 @@
+{% extends "page_app/global/index.html" %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h3 class="mb-1">
+        <i class="fa-solid fa-pen-to-square me-2 text-warning"></i>
+        {{ titulo }}
+      </h3>
+      <p class="text-muted mb-0">
+        Atualize apenas o status e as informações de devolução deste EPI.
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white">
+      <i class="fa-solid fa-helmet-safety me-2 text-warning"></i>
+      Detalhes da movimentação
+    </div>
+
+    <div class="card-body">
+      <!-- Infos travadas (somente leitura) -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Colaborador</label>
+          <div class="form-control-plaintext">
+            {{ mov.colaborador.nome }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Equipamento</label>
+          <div class="form-control-plaintext">
+            {{ mov.equipamento.nome }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Data da entrega</label>
+          <div class="form-control-plaintext">
+            {{ mov.data_entrega|date:"d/m/Y H:i" }}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Prev. devolução</label>
+          <div class="form-control-plaintext">
+            {{ mov.data_prevista_devolucao|date:"d/m/Y H:i" }}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Status atual</label>
+          <div class="form-control-plaintext">
+            {{ mov.get_status_display }}
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Form de edição (status + devolução) -->
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <h6 class="text-uppercase text-muted small mb-2">Atualizar status</h6>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.status.id_for_label }}">Novo status</label>
+          {{ form.status }}
+          {% if form.status.errors %}
+            <div class="text-danger small">{{ form.status.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="row mb-3" id="bloco-data-dev">
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.data_devolucao.id_for_label }}">
+              Data da devolução
+            </label>
+            {{ form.data_devolucao }}
+            {% if form.data_devolucao.errors %}
+              <div class="text-danger small">{{ form.data_devolucao.errors|striptags }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="mb-3" id="bloco-obs-dev">
+          <label class="form-label" for="{{ form.observacao_devolucao.id_for_label }}">
+            Observação da devolução
+          </label>
+          {{ form.observacao_devolucao }}
+          {% if form.observacao_devolucao.errors %}
+            <div class="text-danger small">{{ form.observacao_devolucao.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-between">
+          <a href="{% url 'controlar_epi' %}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i> Voltar
+          </a>
+          <button type="submit" class="btn btn-warning text-dark fw-semibold">
+            <i class="fa-solid fa-floppy-disk me-1"></i> Salvar alterações
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleCamposDev() {
+    const statusSelect = document.getElementById("id_status");
+    const blocoData = document.getElementById("bloco-data-dev");
+    const blocoObs = document.getElementById("bloco-obs-dev");
+    const finais = ["DEVOLVIDO", "DANIFICADO", "PERDIDO"];
+
+    if (statusSelect && finais.includes(statusSelect.value)) {
+      blocoData.style.display = "block";
+      blocoObs.style.display = "block";
+    } else {
+      blocoData.style.display = "none";
+      blocoObs.style.display = "none";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    toggleCamposDev();
+    const statusSelect = document.getElementById("id_status");
+    if (statusSelect) {
+      statusSelect.addEventListener("change", toggleCamposDev);
+    }
+  });
+</script>
+{% endblock %}

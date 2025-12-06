@@ -15,6 +15,7 @@
         </div>
 
         <div class="card-body p-4">
+
           {% if form.non_field_errors %}
             <div class="alert alert-danger">
               {{ form.non_field_errors }}
@@ -24,6 +25,7 @@
           <form method="post">
             {% csrf_token %}
 
+            <!-- Linha 1 -->
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-semibold">Nome completo</label>
@@ -36,6 +38,7 @@
               </div>
             </div>
 
+            <!-- Linha 2 -->
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-semibold">Telefone</label>
@@ -48,11 +51,16 @@
               </div>
             </div>
 
+            <!-- Linha 3: Ativo -->
             <div class="mb-3">
-              <label class="form-label fw-semibold">Observações</label>
-              {{ form.observacao }}
+              <label class="form-label fw-semibold d-block mb-1">Status</label>
+              <div class="form-check form-switch">
+                {{ form.ativo }}
+                <label class="form-check-label ms-2">Colaborador ativo</label>
+              </div>
             </div>
 
+            <!-- Botões -->
             <div class="d-flex justify-content-between mt-3">
               <a href="{% url 'listar_colaboradores' %}" class="btn btn-outline-secondary">
                 <i class="fa-solid fa-arrow-left me-1"></i> Voltar
@@ -62,10 +70,12 @@
                 <i class="fa-solid fa-floppy-disk me-1"></i> Salvar
               </button>
             </div>
-          </form>
-        </div>
 
+          </form>
+
+        </div>
       </div>
+
     </div>
   </div>
 </div>

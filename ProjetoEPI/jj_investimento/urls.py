@@ -22,7 +22,7 @@ from page_app.views import (
     editar_equipamento, excluir_equipamento,
 
     # 📝 CONTROLE DE EPIs
-    controlar_epi,
+    controlar_epi, editar_controle_epi, excluir_controle_epi,
 
     # 📊 RELATÓRIOS
     relatorio_colaborador,
@@ -30,6 +30,7 @@ from page_app.views import (
     # 🔐 Login administrativo real (Django)
     login_admin, logout_admin,
 )
+
 
 urlpatterns = [
     # -----------------------------------------
@@ -91,6 +92,10 @@ urlpatterns = [
     # 📋 CONTROLE DE EPI
     # -----------------------------------------
     path('epi/controlar/', controlar_epi, name='controlar_epi'),
+    path('epi/editar/<int:id>/', editar_controle_epi, name='editar_controle_epi'),
+    path('epi/excluir/<int:id>/', excluir_controle_epi, name='excluir_controle_epi'),
+
+    
 
     # -----------------------------------------
     # 📊 RELATÓRIOS

@@ -21,12 +21,36 @@ class UsuarioSistema(models.Model):
 
 
 class Colaborador(models.Model):
+    # 🔹 Opções de cargos/funções
+    CARGOS = [
+        ('Auxiliar', 'Auxiliar'),
+        ('Operador de Máquina', 'Operador de Máquina'),
+        ('Eletricista', 'Eletricista'),
+        ('Supervisor', 'Supervisor'),
+        ('Técnico de Segurança', 'Técnico de Segurança'),
+        ('Soldador', 'Soldador'),
+        ('Mecânico', 'Mecânico'),
+        ('Almoxarife', 'Almoxarife'),
+        ('Engenheiro', 'Engenheiro'),
+        ('Inspetor', 'Inspetor'),
+    ]
+
     nome = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     telefone = models.CharField(max_length=20, blank=True)
+    funcao = models.CharField(
+        max_length=100,
+        choices=CARGOS,
+        blank=True,
+        null=True,
+        verbose_name="Função / Cargo"
+    )
     ativo = models.BooleanField(default=True)
 
     def __str__(self):
+        # Exemplo: "João Silva (Eletricista)" ou "João Silva"
+        if self.funcao:
+            return f"{self.nome} ({self.funcao})"
         return self.nome
 
 

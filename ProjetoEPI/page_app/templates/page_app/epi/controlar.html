@@ -6,201 +6,200 @@
 {% block content %}
 <div class="container py-4">
 
-  {# Cabeçalho + breadcrumb #}
+  <!-- Cabeçalho -->
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h3 class="mb-1">
         <i class="fa-solid fa-list-check me-2 text-warning"></i>
         Controle de EPI
       </h3>
-      <p class="text-muted mb-0">
-        Registre a entrega e devolução de EPIs para cada colaborador.
-      </p>
+      <p class="text-muted mb-0">Registre e acompanhe a movimentação de EPIs.</p>
     </div>
-
-    <nav aria-label="breadcrumb" class="d-none d-md-block">
-      <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item">
-          <a href="{% url 'index' %}"><a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="{% url 'relatorio_colaborador' %}"><a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-        </li>
-      </ol>
-    </nav>
   </div>
 
-  <div class="card shadow-sm border-0">
-    <div class="card-header bg-dark text-white d-flex align-items-center">
+  <!-- CARD DO FORMULÁRIO -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-dark text-white">
       <i class="fa-solid fa-helmet-safety me-2 text-warning"></i>
-      <div>
-        <h5 class="mb-0">Registro de movimentação de EPI</h5>
-        <small class="text-light-50">
-          
-        </small>
-      </div>
+      Registrar movimentação
     </div>
 
     <div class="card-body">
       <form method="post" novalidate>
         {% csrf_token %}
 
-        {# Erros gerais do formulário #}
         {% if form.non_field_errors %}
-          <div class="alert alert-danger">
-            {{ form.non_field_errors }}
-          </div>
+          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
         {% endif %}
 
-        {# Seção: identificação #}
+        <!-- Identificação -->
         <h6 class="text-uppercase text-muted small mb-2">Identificação</h6>
         <div class="row mb-3">
-          <div class="col-md-6 mb-3 mb-md-0">
-            <label class="form-label" for="{{ form.colaborador.id_for_label }}">
-              Colaborador *
-            </label>
+          <div class="col-md-6 mb-2">
+            <label class="form-label">Colaborador *</label>
             {{ form.colaborador }}
-            {% if form.colaborador.errors %}
-              <div class="text-danger small">
-                {{ form.colaborador.errors|striptags }}
-              </div>
-            {% else %}
-              <div class="form-text">
-
-              </div>
-            {% endif %}
           </div>
 
-          <div class="col-md-6">
-            <label class="form-label" for="{{ form.equipamento.id_for_label }}">
-              Equipamento *
-            </label>
+          <div class="col-md-6 mb-2">
+            <label class="form-label">Equipamento *</label>
             {{ form.equipamento }}
-            {% if form.equipamento.errors %}
-              <div class="text-danger small">
-                {{ form.equipamento.errors|striptags }}
-              </div>
-            {% else %}
-              <div class="form-text">
-              </div>
-            {% endif %}
           </div>
         </div>
 
-        {# Seção: datas #}
-        <h6 class="text-uppercase text-muted small mb-2">Datas da movimentação</h6>
-        <div class="row mb-4">
-          <div class="col-md-4 mb-3">
-            <label class="form-label" for="{{ form.data_entrega.id_for_label }}">
-              Data da entrega 
-            </label>
+        <!-- Datas -->
+        <h6 class="text-uppercase text-muted small mb-2">Datas</h6>
+        <div class="row mb-3">
+          <div class="col-md-4 mb-2">
+            <label class="form-label">Data da Entrega</label>
             {{ form.data_entrega }}
-            {% if form.data_entrega.errors %}
-              <div class="text-danger small">
-                {{ form.data_entrega.errors|striptags }}
-              </div>
-            {% else %}
-              <div class="form-text">
-              </div>
-            {% endif %}
           </div>
 
-          <div class="col-md-4 mb-3">
-            <label class="form-label" for="{{ form.data_prevista_devolucao.id_for_label }}">
-              Data prevista para devolução
-            </label>
+          <div class="col-md-4 mb-2">
+            <label class="form-label">Prev. Devolução</label>
             {{ form.data_prevista_devolucao }}
-            {% if form.data_prevista_devolucao.errors %}
-              <div class="text-danger small">
-                {{ form.data_prevista_devolucao.errors|striptags }}
-              </div>
-            {% else %}
-              <div class="form-text">
-              </div>
-            {% endif %}
           </div>
 
-          <div class="col-md-4 mb-3">
-            <label class="form-label" for="{{ form.data_devolucao.id_for_label }}">
-              Data da devolução
-            </label>
+          <div class="col-md-4 mb-2" id="campo-data-devolucao">
+            <label class="form-label">Data da Devolução</label>
             {{ form.data_devolucao }}
-            {% if form.data_devolucao.errors %}
-              <div class="text-danger small">
-                {{ form.data_devolucao.errors|striptags }}
-              </div>
-            {% else %}
-              <div class="form-text">
-              </div>
-            {% endif %}
           </div>
         </div>
 
-        {# Seção: status #}
-        <h6 class="text-uppercase text-muted small mb-2">Situação do EPI</h6>
+        <!-- Status -->
+        <h6 class="text-uppercase text-muted small mb-2">Status do EPI</h6>
         <div class="mb-3">
-          <label class="form-label" for="{{ form.status.id_for_label }}">
-
-          </label>
           {{ form.status }}
-          {% if form.status.errors %}
-            <div class="text-danger small">
-              {{ form.status.errors|striptags }}
-            </div>
-          {% else %}
-            <div class="form-text">
-            </div>
-          {% endif %}
         </div>
 
-        {# Seção: observações #}
+        <!-- Observações -->
         <h6 class="text-uppercase text-muted small mb-2">Observações</h6>
         <div class="mb-3">
-          <label class="form-label" for="{{ form.observacao.id_for_label }}">
-            Observações da entrega
-          </label>
+          <label class="form-label">Obs. Entrega</label>
           {{ form.observacao }}
-          {% if form.observacao.errors %}
-            <div class="text-danger small">
-              {{ form.observacao.errors|striptags }}
-            </div>
-          {% endif %}
         </div>
 
-        <div class="mb-4">
-          <label class="form-label" for="{{ form.observacao_devolucao.id_for_label }}">
-            Observações da devolução
-          </label>
+        <div class="mb-4" id="campo-observacao-devolucao">
+          <label class="form-label">Obs. Devolução</label>
           {{ form.observacao_devolucao }}
-          {% if form.observacao_devolucao.errors %}
-            <div class="text-danger small">
-              {{ form.observacao_devolucao.errors|striptags }}
-            </div>
-          {% endif %}
         </div>
 
+        <!-- Botões -->
         <hr>
-
-        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+        <div class="d-flex justify-content-between">
           <a href="{% url 'relatorio_colaborador' %}" class="btn btn-outline-secondary">
-            <i class="fa-solid fa-file-lines me-1"></i> Ver relatório por colaborador
+            <i class="fa-solid fa-chart-column me-1"></i> Relatórios
           </a>
-
-          <div class="d-flex gap-2 justify-content-end">
-            <button type="reset" class="btn btn-light border">
-              <i class="fa-solid fa-eraser me-1"></i> Limpar
-            </button>
-            <button type="submit" class="btn btn-warning text-dark fw-semibold">
-              <i class="fa-solid fa-floppy-disk me-1"></i> Salvar movimentação
-            </button>
-          </div>
+          <button type="submit" class="btn btn-warning text-dark fw-semibold">
+            <i class="fa-solid fa-floppy-disk me-1"></i> Salvar
+          </button>
         </div>
 
       </form>
     </div>
   </div>
 
+  <!-- TABELA -->
+  <h4 class="mb-3">
+    <i class="fa-solid fa-clock-rotate-left me-2 text-warning"></i>
+    Movimentações Registradas
+  </h4>
+
+  <div class="table-responsive shadow-sm">
+    <table class="table table-hover align-middle bg-white">
+      <thead class="table-dark">
+        <tr>
+          <th>Colaborador</th>
+          <th>Equipamento</th>
+          <th>Entrega</th>
+          <th>Prev. Devolução</th>
+          <th>Devolução</th>
+          <th>Status</th>
+          <th class="text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for mov in movimentos %}
+        <tr>
+          <td>{{ mov.colaborador.nome }}</td>
+          <td>{{ mov.equipamento.nome }}</td>
+          <td>{{ mov.data_entrega|date:"d/m/Y H:i" }}</td>
+          <td>{{ mov.data_prevista_devolucao|date:"d/m/Y H:i" }}</td>
+
+          <td>
+            {% if mov.data_devolucao %}
+              {{ mov.data_devolucao|date:"d/m/Y H:i" }}
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+
+          <!-- Badge colorida -->
+          <td>
+            {% if mov.status == "EMPRESTADO" %}
+              <span class="badge bg-primary">Emprestado</span>
+            {% elif mov.status == "EM_USO" %}
+              <span class="badge bg-info text-dark">Em uso</span>
+            {% elif mov.status == "FORNECIDO" %}
+              <span class="badge bg-success">Fornecido</span>
+            {% elif mov.status == "DEVOLVIDO" %}
+              <span class="badge bg-secondary">Devolvido</span>
+            {% elif mov.status == "DANIFICADO" %}
+              <span class="badge bg-warning text-dark">Danificado</span>
+            {% elif mov.status == "PERDIDO" %}
+              <span class="badge bg-danger">Perdido</span>
+            {% else %}
+              <span class="badge bg-light text-dark">Indefinido</span>
+            {% endif %}
+          </td>
+
+          <!-- Ações -->
+          <td class="text-center">
+            <a href="{% url 'editar_controle_epi' mov.id %}" class="btn btn-sm btn-warning text-dark fw-semibold">
+              <i class="fa-solid fa-pen"></i>
+            </a>
+
+            <a href="{% url 'excluir_controle_epi' mov.id %}" class="btn btn-sm btn-danger fw-semibold">
+              <i class="fa-solid fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center py-3 text-muted">
+            Nenhuma movimentação registrada.
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
 </div>
+
+<!-- SCRIPT PARA ESCONDER/EXIBIR CAMPOS DE DEVOLUÇÃO -->
+<script>
+  function toggleCamposDevolucao() {
+    const statusSelect = document.getElementById("id_status");
+    const campoDataDev = document.getElementById("campo-data-devolucao");
+    const campoObsDev = document.getElementById("campo-observacao-devolucao");
+
+    const finais = ["DEVOLVIDO", "DANIFICADO", "PERDIDO"];
+
+    if (finais.includes(statusSelect.value)) {
+      campoDataDev.style.display = "block";
+      campoObsDev.style.display = "block";
+    } else {
+      campoDataDev.style.display = "none";
+      campoObsDev.style.display = "none";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    toggleCamposDevolucao();
+    document.getElementById("id_status").addEventListener("change", toggleCamposDevolucao);
+  });
+</script>
+
 {% endblock %}
