@@ -1,14 +1,285 @@
 {% extends "page_app/global/index.html" %}
-{% block title %}Ajuda{% endblock %}
+{% load static %}
+
+{% block title %}Ajuda{% endblock title %}
 
 {% block content %}
-<div class="container py-4">
-    <h3 class="mb-3">
-        <i class="fa-solid fa-circle-question me-2"></i> Ajuda
-    </h3>
-    <p>
-        Esta é uma página de ajuda simples. Você pode descrever aqui como usar o sistema,
-        como cadastrar colaboradores, equipamentos, registrar EPIs, etc.
-    </p>
+<div class="container my-5">
+
+  {# --- Alerta dinâmico quando a página for aberta a partir de um plano/ação --- #}
+  {% if request.GET.plano %}
+    {% with plano=request.GET.plano acao=request.GET.acao %}
+      <div class="alert alert-info shadow-sm mb-4" role="alert">
+        {% if acao == "demo" %}
+          <strong>Você está solicitando uma demonstração do plano:</strong>
+        {% elif acao == "contratar" %}
+          <strong>Você demonstrou interesse em contratar o plano:</strong>
+        {% else %}
+          <strong>Você está solicitando informações sobre o plano:</strong>
+        {% endif %}
+        <div class="mt-2">
+          <span class="h5">{{ plano }}</span>
+        </div>
+        <div class="mt-2 small text-muted">
+          Preencha o formulário abaixo que nossa equipe entrará em contato.
+        </div>
+      </div>
+    {% endwith %}
+  {% endif %}
+
+  <!-- Título e descrição -->
+  <div class="text-center mb-5">
+      <h1 class="fw-bold text-warning">
+        <i class="fa-solid fa-circle-question me-2"></i>
+        Ajuda & Contato
+      </h1>
+      <p class="lead text-muted">
+          Aqui você encontra orientações de uso do sistema, erros comuns e também pode falar diretamente com o responsável.
+      </p>
+  </div>
+
+  <!-- Cartões de contato -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center border-warning">
+        <div class="card-body">
+          <i class="far fa-envelope fa-2x mb-3 text-warning"></i>
+          <h5 class="card-title">E-mail</h5>
+          <p class="card-text">digo.m.jlle@gmail.com</p>
+          <a href="mailto:digo.m.jlle@gmail.com" class="btn btn-outline-warning btn-sm">Enviar e-mail</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center border-success">
+        <div class="card-body">
+          <i class="fab fa-whatsapp fa-2x mb-3 text-success"></i>
+          <h5 class="card-title">WhatsApp</h5>
+          <p class="card-text">(47) 99728-3117</p>
+          <a href="https://wa.me/5547997283117?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20sistema%20de%20gestão%20de%20EPIs." target="_blank" class="btn btn-success btn-sm">Enviar mensagem</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 text-center border-dark">
+        <div class="card-body">
+          <i class="fab fa-github fa-2x mb-3 text-dark"></i>
+          <h5 class="card-title">GitHub</h5>
+          <p class="card-text">ProjetoEPI</p>
+          <a href="https://github.com/Eisziel/ProjetoEPI/tree/main/ProjetoEPI" target="_blank" class="btn btn-dark btn-sm">Ver projeto</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário de contato -->
+  <div class="row justify-content-center mb-5" id="contato-form">
+    <div class="col-md-8">
+      <h2 class="fw-bold mb-4 text-center">Envie sua mensagem</h2>
+
+      <form action="" method="POST" class="p-4 shadow rounded bg-light">
+        {% csrf_token %}
+
+        <input type="hidden" name="plano" value="{{ request.GET.plano|default:'' }}">
+        <input type="hidden" name="acao" value="{{ request.GET.acao|default:'' }}">
+
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" placeholder="Seu nome" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Seu e-mail" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="telefone" class="form-label">Telefone (opcional)</label>
+          <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(xx) xxxxx-xxxx">
+        </div>
+
+        <div class="mb-3">
+          <label for="mensagem" class="form-label">Mensagem</label>
+          <textarea class="form-control" id="mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem aqui..." required></textarea>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-warning fw-bold px-4">Enviar Mensagem</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- Erros comuns & soluções -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <h2 class="fw-bold mb-4 text-center">Erros comuns & soluções</h2>
+      <p class="text-muted text-center mb-4">
+        Antes de chamar suporte, dá uma olhada se o seu problema é um desses aqui 👇
+      </p>
+
+      <div class="accordion shadow-sm" id="errosAccordion">
+
+        <!-- ERRO 1 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="erro1">
+            <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseErro1">
+              Não consigo fazer login no sistema
+            </button>
+          </h2>
+          <div id="collapseErro1" class="accordion-collapse collapse show" data-bs-parent="#errosAccordion">
+            <div class="accordion-body">
+              <strong>Possíveis causas:</strong>
+              <ul>
+                <li>Usuário ou senha do <em>Usuário do Sistema</em> digitados incorretamente;</li>
+                <li>Usuário marcado como inativo no cadastro;</li>
+                <li>Tentando usar o login administrativo do Django em vez do login do sistema.</li>
+              </ul>
+              <strong>Como resolver:</strong>
+              <ul>
+                <li>Verifique se está usando o menu <strong>Entrar</strong> (login do sistema) ou <strong>Conta Administrativa</strong> (admin Django);</li>
+                <li>Confirme usuário e senha exatamente como foram cadastrados;</li>
+                <li>Acesse o admin Django, abra <strong>Usuário do Sistema</strong> e confira se o campo <strong>Ativo</strong> está marcado.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ERRO 2 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="erro2">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseErro2">
+              Não consigo cadastrar colaborador (erro de permissão ou tela de login)
+            </button>
+          </h2>
+          <div id="collapseErro2" class="accordion-collapse collapse" data-bs-parent="#errosAccordion">
+            <div class="accordion-body">
+              <strong>Possíveis causas:</strong>
+              <ul>
+                <li>Você não está logado como usuário do sistema;</li>
+                <li>A rota exige autenticação e está redirecionando para login.</li>
+              </ul>
+              <strong>Como resolver:</strong>
+              <ul>
+                <li>Faça login pelo menu <strong>Entrar</strong> antes de acessar <strong>Cadastro de Colaboradores</strong>;</li>
+                <li>Confirme se a URL que você acessou é <code>/colaboradores/novo/</code> (menu lateral) e não outra rota antiga;</li>
+                <li>Se estiver usando outro navegador, confira se a sessão não expirou.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ERRO 3 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="erro3">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseErro3">
+              Campos “vazios” ou layout quebrado nos formulários
+            </button>
+          </h2>
+          <div id="collapseErro3" class="accordion-collapse collapse" data-bs-parent="#errosAccordion">
+            <div class="accordion-body">
+              <strong>Possíveis causas:</strong>
+              <ul>
+                <li>Formulário sem classes CSS do Bootstrap aplicadas;</li>
+                <li>Algum campo não foi incluído no template.</li>
+              </ul>
+              <strong>Como resolver:</strong>
+              <ul>
+                <li>Verifique no template se os campos estão sendo exibidos um a um (ex.: <code>{{ form.nome }}</code>, <code>{{ form.email }}</code>);</li>
+                <li>Confira se o <code>forms.py</code> está definindo corretamente os widgets com <code>class="form-control"</code>;</li>
+                <li>Veja se o template está estendendo <code>page_app/global/index.html</code>, para manter o mesmo layout do site.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ERRO 4 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="erro4">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseErro4">
+              Erro ao registrar controle de EPI
+            </button>
+          </h2>
+          <div id="collapseErro4" class="accordion-collapse collapse" data-bs-parent="#errosAccordion">
+            <div class="accordion-body">
+              <strong>Possíveis causas:</strong>
+              <ul>
+                <li>Colaborador ou equipamento ainda não cadastrados;</li>
+                <li>Datas inválidas (por exemplo, devolução antes da entrega);</li>
+                <li>Algum campo obrigatório foi deixado em branco.</li>
+              </ul>
+              <strong>Como resolver:</strong>
+              <ul>
+                <li>Cadastre primeiro <strong>Colaboradores</strong> e <strong>Equipamentos</strong> antes de usar o menu <strong>Controle de EPI</strong>;</li>
+                <li>Confira se a <strong>data de entrega</strong> é anterior à <strong>data de devolução</strong>;</li>
+                <li>Veja se todos os campos marcados como obrigatórios estão preenchidos.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ERRO 5 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="erro5">
+            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseErro5">
+              Erro 404 (página não encontrada) ao clicar em um menu
+            </button>
+          </h2>
+          <div id="collapseErro5" class="accordion-collapse collapse" data-bs-parent="#errosAccordion">
+            <div class="accordion-body">
+              <strong>Possíveis causas:</strong>
+              <ul>
+                <li>Nome da rota (URL name) alterado em <code>urls.py</code> mas não atualizado no template;</li>
+                <li>Caminho digitado manualmente incorreto.</li>
+              </ul>
+              <strong>Como resolver:</strong>
+              <ul>
+                <li>
+                  No template, confira se o nome usado na tag 
+                  <code>url</code> (por exemplo <code>'listar_colaboradores'</code>)
+                  é exatamente o mesmo definido em <code>name=</code> dentro do <code>urls.py</code>;
+                </li>
+                <li>Evite digitar a URL na barra do navegador, use sempre os links do menu lateral/topo;</li>
+                <li>Se mudou alguma URL recentemente, revise todos os templates que usam essa rota.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /accordion -->
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- Localização -->
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <h2 class="fw-bold mb-4 text-center">Nossa Localização</h2>
+      <p class="text-center text-muted mb-4">
+        Rua Arno Waldemar Döhler, 957 – Zona Industrial Norte<br>
+        Joinville / SC – CEP 89219-510
+      </p>
+      <div class="ratio ratio-16x9 shadow rounded">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.071147184763!2d-48.85607437529053!3d-26.25935421622114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94deafbe3ebf0c05%3A0x624c0303ba7bf8a7!2sSENAI%20Joinville%20Norte%20I%20-%20UniSENAI!5e0!3m2!1spt-BR!2sbr!4v1762007611706!5m2!1spt-BR!2sbr" 
+            width="100%" height="450" style="border:0;" allowfullscreen=""
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <p class="mb-3">Não achou a solução aqui? <a href="#contato-form" class="fw-bold">Envie uma mensagem</a></p>
+    <a href="{% url 'index' %}" class="btn btn-secondary">
+      <i class="fas fa-arrow-left me-2"></i> Voltar à página inicial
+    </a>
+  </div>
+
 </div>
-{% endblock %}
+{% endblock content %}

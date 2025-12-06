@@ -1,84 +1,373 @@
 {% extends "page_app/global/index.html" %}
 {% load static %}
 
-{% block title %}Home{% endblock title %}
+{% block title %}Início{% endblock title %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-4">
 
-    <!-- Hero Section -->
-    <div class="jumbotron p-5 text-center bg-light rounded-3 shadow-sm">
-        <h1 class="display-5 fw-bold">Gerencie EPIs com eficiência</h1>
-        <p class="lead mb-4">Controle empréstimos, cadastros de colaboradores e usuários, garantindo segurança e conformidade no canteiro de obras.</p>
+  <!-- HERO / CABEÇALHO PRINCIPAL -->
+  <div class="row align-items-center g-4 mb-4">
+    <div class="col-lg-7">
+      <div class="mb-2">
+        <span class="badge bg-warning text-dark text-uppercase small">
+          Gestão de EPIs • Painel inicial
+        </span>
+      </div>
+      <h1 class="fw-bold mb-3">
+        Controle total de EPIs, pessoas e segurança em um só lugar.
+      </h1>
+      <p class="lead text-muted mb-4">
+        Cadastre colaboradores, gerencie equipamentos, acompanhe entregas de EPIs
+        e visualize indicadores de segurança do trabalho de forma simples e centralizada.
+      </p>
 
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a class="btn btn-outline-primary btn-lg px-4 py-2 shadow-sm" href="{% url 'info' %}" role="button">
-                <i class="fas fa-info-circle me-2"></i> Saiba mais
-            </a>
-        </div>
-    </div>
-
-    <hr class="my-5">
-
-    <!-- Funcionalidades em Cards -->
-    <div class="row text-center g-4">
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="{% static 'page_app/img/imagem_2.jpg' %}" class="card-img-top" alt="Cadastro de colaboradores">
-                <div class="card-body">
-                    <h5 class="card-title">Cadastro de Colaboradores</h5>
-                    <p class="card-text">Registre todos os colaboradores da empresa e associe os EPIs necessários de forma rápida e intuitiva.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="{% static 'page_app/img/imagem_3.jpg' %}" class="card-img-top" alt="Empréstimo de EPIs">
-                <div class="card-body">
-                    <h5 class="card-title">Empréstimo de EPIs</h5>
-                    <p class="card-text">Controle cada empréstimo de equipamento, garantindo que todos os colaboradores estejam protegidos e em conformidade com a norma.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="{% static 'page_app/img/imagem_1.jpg' %}" class="card-img-top" alt="Relatórios e conformidade">
-                <div class="card-body">
-                    <h5 class="card-title">Relatórios e Conformidade</h5>
-                    <p class="card-text">Acompanhe o uso dos EPIs, gere relatórios detalhados e assegure que a empresa esteja dentro das normas regulamentadoras.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <hr class="my-5">
-
-    <!-- Benefícios -->
-    <div class="row align-items-center g-5">
-        <div class="col-md-6">
-            <h2>Por que usar nosso sistema?</h2>
-            <ul class="list-group list-group-flush mt-3 shadow-sm">
-                <li class="list-group-item">Segurança reforçada para todos os colaboradores.</li>
-                <li class="list-group-item">Controle completo e histórico de empréstimos de EPIs.</li>
-                <li class="list-group-item">Interface intuitiva, fácil de usar por qualquer funcionário.</li>
-                <li class="list-group-item">Atendimento às normas regulamentadoras de segurança.</li>
-            </ul>
-        </div>
-        <div class="col-md-6 text-center">
-            <img src="{% static 'page_app/img/imagem_4.jpg' %}" class="img-fluid rounded shadow" alt="Benefícios do sistema de EPIs">
-        </div>
-    </div>
-
-    <hr class="my-5">
-
-    <!-- Call to action final -->
-    <div class="text-center py-5 bg-light rounded-3 shadow-sm">
-        <h3 class="fw-bold">Comece agora a gerenciar os EPIs da sua equipe!</h3>
-        <p class="lead">Aumente a segurança no canteiro de obras e garanta a conformidade da sua empresa.</p>
-        <a class="btn btn-warning btn-lg text-dark px-4 py-2 fw-semibold shadow-sm" href="{% url 'services' %}">
-            <i class="fas fa-envelope-open-text me-2"></i> Solicitar Serviços
+      <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'entrar' %}" class="btn btn-warning text-dark fw-semibold btn-lg">
+          <i class="fa-solid fa-right-to-bracket me-2"></i>
+          Entrar no sistema
         </a>
+        <a href="{% url 'info' %}" class="btn btn-outline-light btn-lg">
+          <i class="fa-solid fa-gauge-high me-2"></i>
+          Ver painel de indicadores
+        </a>
+      </div>
+
+      <p class="text-muted small mt-3 mb-0">
+        Dica: use o menu superior para navegar entre colaboradores, equipamentos, controle de EPIs e relatórios.
+      </p>
     </div>
+
+    <!-- MINI PAINEL À DIREITA -->
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-0 h-100 home-status-card">
+        <div class="card-body">
+          <h5 class="mb-3">
+            <i class="fa-solid fa-circle-nodes text-warning me-2"></i>
+            Visão rápida (dados ilustrativos)
+          </h5>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="small text-muted">Colaboradores cadastrados</span>
+              <span class="small fw-semibold">128</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar bg-primary" style="width: 70%;"></div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="small text-muted">EPIs em uso neste momento</span>
+              <span class="small fw-semibold">312</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar bg-success" style="width: 60%;"></div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="small text-muted">EPIs próximos da validade</span>
+              <span class="small fw-semibold text-warning">18</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar bg-warning" style="width: 25%;"></div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <div>
+              <small class="text-muted d-block">Última atualização</small>
+              <span class="small">Há poucos minutos (simulado)</span>
+            </div>
+            <a href="{% url 'relatorio_colaborador' %}" class="btn btn-sm btn-outline-secondary">
+              <i class="fa-solid fa-file-lines me-1"></i>
+              Ver relatórios
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATALHOS PRINCIPAIS DO SISTEMA -->
+  <div class="mb-4">
+    <h4 class="fw-semibold mb-3">
+      <i class="fa-solid fa-bolt-lightning text-warning me-2"></i>
+      Atalhos rápidos
+    </h4>
+    <div class="row g-3">
+      <div class="col-md-3">
+        <a href="{% url 'listar_colaboradores' %}" class="home-link-card text-decoration-none">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <div class="home-icon-wrapper bg-primary-subtle me-2">
+                  <i class="fa-solid fa-users text-primary"></i>
+                </div>
+                <h6 class="mb-0 fw-semibold text-white">Colaboradores</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Liste, cadastre e gerencie todos os colaboradores.
+              </p>
+              <span class="small text-warning">
+                Acessar &rarr;
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-3">
+        <a href="{% url 'listar_equipamentos' %}" class="home-link-card text-decoration-none">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <div class="home-icon-wrapper bg-success-subtle me-2">
+                  <i class="fa-solid fa-helmet-safety text-success"></i>
+                </div>
+                <h6 class="mb-0 fw-semibold text-white">Equipamentos</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Cadastre EPIs, quantidades e acompanhe o estoque.
+              </p>
+              <span class="small text-warning">
+                Acessar &rarr;
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-3">
+        <a href="{% url 'controlar_epi' %}" class="home-link-card text-decoration-none">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <div class="home-icon-wrapper bg-warning-subtle me-2">
+                  <i class="fa-solid fa-list-check text-warning"></i>
+                </div>
+                <h6 class="mb-0 fw-semibold text-white">Controle de EPI</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Registre entregas, devoluções e status de EPIs.
+              </p>
+              <span class="small text-warning">
+                Controlar &rarr;
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-3">
+        <a href="{% url 'services' %}" class="home-link-card text-decoration-none">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <div class="home-icon-wrapper bg-info-subtle me-2">
+                  <i class="fa-solid fa-industry text-info"></i>
+                </div>
+                <h6 class="mb-0 fw-semibold text-white">Marcas & Distribuidores</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Consulte fabricantes, distribuidores e linhas de EPIs.
+              </p>
+              <span class="small text-warning">
+                Ver serviços &rarr;
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINHA DIVISÓRIA -->
+  <hr class="my-4">
+
+  <!-- DOIS BLOCOS: SEGURANÇA x OPERAÇÃO -->
+  <div class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="mb-3">
+            <i class="fa-solid fa-shield-heart text-success me-2"></i>
+            Segurança e conformidade
+          </h5>
+
+          <ul class="list-unstyled small mb-3">
+            <li class="mb-2">
+              <i class="fa-solid fa-check-circle text-success me-2"></i>
+              Acompanhe uso correto de EPIs por setor e por função.
+            </li>
+            <li class="mb-2">
+              <i class="fa-solid fa-check-circle text-success me-2"></i>
+              Geração de relatórios para auditorias e inspeções.
+            </li>
+            <li class="mb-2">
+              <i class="fa-solid fa-check-circle text-success me-2"></i>
+              Alertas para EPIs vencidos ou próximos do vencimento.
+            </li>
+          </ul>
+
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="border rounded-3 p-2 small">
+                <span class="text-muted d-block">Uso adequado de EPIs</span>
+                <span class="fw-bold text-success">94%</span>
+                <div class="progress mt-1" style="height: 6px;">
+                  <div class="progress-bar bg-success" style="width: 94%;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="border rounded-3 p-2 small">
+                <span class="text-muted d-block">Setores auditados</span>
+                <span class="fw-bold text-info">7 / 9</span>
+                <div class="progress mt-1" style="height: 6px;">
+                  <div class="progress-bar bg-info" style="width: 78%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 text-end">
+            <a href="{% url 'relatorio_colaborador' %}" class="btn btn-sm btn-outline-secondary">
+              <i class="fa-solid fa-file-lines me-1"></i>
+              Relatórios de segurança
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLUXO DE USO DO SISTEMA -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="mb-3">
+            <i class="fa-solid fa-diagram-project text-warning me-2"></i>
+            Fluxo básico de uso
+          </h5>
+
+          <ol class="timeline small">
+            <li class="timeline-item mb-3">
+              <div class="timeline-badge bg-primary"></div>
+              <div class="timeline-content">
+                <strong>1. Cadastrar colaboradores</strong><br>
+                Defina quem está habilitado a receber EPIs e em qual função/setor atua.
+              </div>
+            </li>
+            <li class="timeline-item mb-3">
+              <div class="timeline-badge bg-success"></div>
+              <div class="timeline-content">
+                <strong>2. Cadastrar EPIs e estoque</strong><br>
+                Registre cada tipo de EPI, código interno, CA e quantidade disponível.
+              </div>
+            </li>
+            <li class="timeline-item mb-3">
+              <div class="timeline-badge bg-warning"></div>
+              <div class="timeline-content">
+                <strong>3. Registrar entregas / devoluções</strong><br>
+                Use o módulo de <em>Controle de EPI</em> para rastrear todo o ciclo do equipamento.
+              </div>
+            </li>
+            <li class="timeline-item mb-0">
+              <div class="timeline-badge bg-info"></div>
+              <div class="timeline-content">
+                <strong>4. Acompanhar indicadores</strong><br>
+                Acesse o painel de <em>Recursos & Indicadores</em> para ver custos, produtividade e segurança.
+              </div>
+            </li>
+          </ol>
+
+          <div class="mt-2 text-end">
+            <a href="{% url 'ajuda_usuario' %}" class="btn btn-sm btn-outline-light">
+              <i class="fa-solid fa-circle-question me-1"></i>
+              Ver ajuda passo a passo
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RODAPÉ DO INÍCIO -->
+  <div class="text-center mt-4 pt-3 border-top border-secondary">
+    <p class="small text-muted mb-2">
+      Este sistema é um projeto acadêmico focado em boas práticas de gestão de EPIs.
+    </p>
+    <a href="{% url 'contato' %}" class="btn btn-outline-warning btn-sm text-dark">
+      <i class="fa-solid fa-message me-1"></i>
+      Falar com o responsável pelo projeto
+    </a>
+  </div>
 
 </div>
+
+<style>
+  .home-status-card {
+    background: radial-gradient(circle at top left, rgba(255,193,7,0.05), transparent 55%);
+  }
+
+  .home-link-card .card {
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    background: rgba(15, 15, 20, 0.9);
+  }
+
+  .home-link-card .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.35);
+    border-color: rgba(255,193,7,0.7);
+  }
+
+  .home-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .9rem;
+  }
+
+  /* Linha do tempo simples */
+  .timeline {
+    list-style: none;
+    padding-left: 0;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline-badge {
+    position: absolute;
+    left: 4px;
+    top: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #111;
+  }
+
+  .timeline-content {
+    color: #ddd;
+  }
+</style>
 {% endblock content %}

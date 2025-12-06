@@ -1,103 +1,227 @@
 {% extends "page_app/global/index.html" %}
 {% load static %}
 
-{% block title %}Serviços / Planos{% endblock title %}
+{% block title %}Serviços / Marcas & Fabricantes{% endblock title %}
 
 {% block content %}
 <div class="container mt-5">
-  <div class="text-center mb-4">
-    <h1 class="display-6 fw-bold">Planos e Serviços</h1>
-    <p class="lead text-muted">Escolha o plano certo para sua empresa. Agende uma demonstração e conheça tudo na prática.</p>
+
+  <!-- Título e descrição -->
+  <div class="text-center mb-5">
+    <h1 class="display-6 fw-bold text-warning">
+      <i class="fa-solid fa-helmet-safety me-2"></i>
+      Marcas de EPIs & Fabricantes
+    </h1>
+    <p class="lead text-muted">
+      Aqui você encontra alguns dos principais fabricantes de EPIs do mercado.
+      Use os links para acessar diretamente o catálogo oficial de produtos e localizar distribuidores autorizados.
+    </p>
   </div>
 
+  <!-- Marcas / Fabricantes -->
   <div class="row g-4 justify-content-center">
-    {% if planos %}
-      {% for plano in planos %}
-      <div class="col-md-4">
-        <div class="card h-100 shadow-sm position-relative {% if plano.popular %}border-3 border-warning{% endif %}">
-          {% if plano.popular %}
-            <div class="ribbon-popular">Mais popular</div>
-          {% endif %}
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title fw-bold">{{ plano.nome }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ plano.preco }}</h6>
-            <p class="card-text">{{ plano.desc }}</p>
 
-            <ul class="list-unstyled mt-2 mb-3">
-              {% for f in plano.features %}
-              <li class="mb-1"><i class="fas fa-check me-2 text-success"></i>{{ f }}</li>
-              {% endfor %}
-            </ul>
+    <!-- 3M -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold">
+            <i class="fa-solid fa-industry me-2 text-danger"></i>3M
+          </h5>
+          <p class="text-muted small mb-2">Respiratórios, óculos, protetores auditivos, capacetes e mais.</p>
 
-            <div class="mb-3">
-              <strong>Impacto / Benefícios:</strong>
-              <ul class="small mb-0">
-                {% for i in plano.impact %}
-                <li>{{ i }}</li>
-                {% endfor %}
-              </ul>
-            </div>
+          <ul class="small mb-3">
+            <li>Respiradores PFF2 e PFF3</li>
+            <li>Protetores auditivos tipo concha e plug</li>
+            <li>Óculos de segurança e faceshields</li>
+            <li>Capacetes e acessórios</li>
+          </ul>
 
-            <div class="mt-auto d-grid gap-2">
-              <!-- solicitar demonstração (pré-fill via query string) -->
-              <a href="{% url 'contato' %}?plano={{ plano.nome|urlencode }}&acao=demo"
-                 class="btn btn-lg btn-primary btn-cta fw-semibold">
-                Solicitar demonstração
-              </a>
-
-              <!-- contratar / falar com vendas -->
-              <a href="{% url 'contato' %}?plano={{ plano.nome|urlencode }}&acao=contratar"
-                 class="btn btn-outline-dark btn-sm">
-                Contratar / Falar com vendas
-              </a>
-            </div>
+          <div class="mt-auto d-grid gap-2">
+            <a href="https://www.3m.com.br/3M/pt_BR/p/c/equipamento-protecao-individual/"
+               class="btn btn-warning btn-sm fw-semibold"
+               target="_blank" rel="noopener noreferrer">
+              Ver catálogo de EPIs
+            </a>
+            <a href="https://www.3m.com.br/3M/pt_BR/p/"
+               class="btn btn-outline-dark btn-sm"
+               target="_blank" rel="noopener noreferrer">
+              Distribuidores / Onde comprar
+            </a>
           </div>
         </div>
       </div>
-      {% endfor %}
-    {% else %}
-      <div class="col-12">
-        <div class="alert alert-info text-center">
-          Ainda não há planos disponíveis no momento. Caso queira, <a href="{% url 'contato' %}">fale com a gente</a>.
+    </div>
+
+    <!-- MSA Safety -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold">
+            <i class="fa-solid fa-hard-hat me-2 text-success"></i>MSA Safety
+          </h5>
+          <p class="text-muted small mb-2">Proteção contra quedas, capacetes, detectores de gás e mais.</p>
+
+          <ul class="small mb-3">
+            <li>Capacetes de segurança</li>
+            <li>Cinturões e talabartes</li>
+            <li>Detectores portáteis de gás</li>
+            <li>Sistemas de linha de vida</li>
+          </ul>
+
+          <div class="mt-auto d-grid gap-2">
+            <a href="https://br.msasafety.com"
+               class="btn btn-warning btn-sm fw-semibold"
+               target="_blank" rel="noopener noreferrer">
+              Ver catálogo de EPIs
+            </a>
+            <a href="https://br.msasafety.com/where-to-buy"
+               class="btn btn-outline-dark btn-sm"
+               target="_blank" rel="noopener noreferrer">
+              Distribuidores / Onde comprar
+            </a>
+          </div>
         </div>
       </div>
-    {% endif %}
-  </div>
+    </div>
+
+    <!-- Honeywell Safety -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold">
+            <i class="fa-solid fa-shield-halved me-2 text-primary"></i>Honeywell Safety
+          </h5>
+          <p class="text-muted small mb-2">Respiratórios, luvas, óculos, proteção contra quedas e muito mais.</p>
+
+          <ul class="small mb-3">
+            <li>Respiradores reutilizáveis e descartáveis</li>
+            <li>Luvas de proteção química e mecânica</li>
+            <li>Óculos e viseiras</li>
+            <li>Travas quedas e cintos</li>
+          </ul>
+
+          <div class="mt-auto d-grid gap-2">
+            <a href="https://sps.honeywell.com/us/en/products/safety"
+               class="btn btn-warning btn-sm fw-semibold"
+               target="_blank" rel="noopener noreferrer">
+              Ver catálogo de EPIs
+            </a>
+            <a href="https://automation.honeywell.com/us/en/services/personal-protective-equipment"
+               class="btn btn-outline-dark btn-sm"
+               target="_blank" rel="noopener noreferrer">
+              Distribuidores / Onde comprar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delta Plus Brasil -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold">
+            <i class="fa-solid fa-vest-patches me-2 text-warning"></i>Delta Plus Brasil
+          </h5>
+          <p class="text-muted small mb-2">Linha completa de EPIs para construção civil e indústria.</p>
+
+          <ul class="small mb-3">
+            <li>Capacetes e óculos de segurança</li>
+            <li>Luvas e vestimentas de proteção</li>
+            <li>Proteção contra quedas</li>
+          </ul>
+
+          <div class="mt-auto d-grid gap-2">
+            <a href="https://www.deltaplusbrasil.com.br/pt-BR/fall-permanent-system-solutions/"
+               class="btn btn-warning btn-sm fw-semibold"
+               target="_blank" rel="noopener noreferrer">
+              Ver catálogo de EPIs
+            </a>
+            <a href="https://www.deltaplusbrasil.com.br/pt-BR/store-locator/"
+               class="btn btn-outline-dark btn-sm"
+               target="_blank" rel="noopener noreferrer">
+              Distribuidores / Onde comprar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vonder -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold">
+            <i class="fa-solid fa-gloves me-2 text-warning"></i>Vonder
+          </h5>
+          <p class="text-muted small mb-2">EPIs para oficina, construção e manutenção industrial.</p>
+
+          <ul class="small mb-3">
+            <li>Luvas de proteção</li>
+            <li>Óculos, protetores faciais e auriculares</li>
+            <li>Capacetes e cintos de segurança</li>
+          </ul>
+
+          <div class="mt-auto d-grid gap-2">
+            <a href="https://www.vonder.com.br/departamento/equipamentos_de_protecao_individual_coletiva_sinalizacao_e_seguranca"
+               class="btn btn-warning btn-sm fw-semibold"
+               target="_blank" rel="noopener noreferrer">
+              Ver catálogo de EPIs
+            </a>
+            <a href="https://www.vonder.com.br/centralAtendimento/onde-comprar-vonder"
+               class="btn btn-outline-dark btn-sm"
+               target="_blank" rel="noopener noreferrer">
+              Distribuidores / Onde comprar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carbografite -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold">
+            <i class="fa-solid fa-fire-extinguisher me-2 text-danger"></i>Carbografite
+          </h5>
+          <p class="text-muted small mb-2">EPIs voltados à solda, abrasão, respiração e proteção visual.</p>
+
+          <ul class="small mb-3">
+            <li>Máscaras de solda e filtros</li>
+            <li>Respiradores e cartuchos</li>
+            <li>Óculos e viseiras de proteção</li>
+          </ul>
+
+          <div class="mt-auto d-grid gap-2">
+            <a href="https://www.astrodistribuidora.com/marcas/carbografite?srsltid=AfmBOorj1tBctAFxFLucOv2X3hmE4qcfwclB8qdodKJgbnGUKqFtebAv/"
+               class="btn btn-warning btn-sm fw-semibold"
+               target="_blank" rel="noopener noreferrer">
+              Ver catálogo de EPIs
+            </a>
+            <a href="https://www.fg.com.br/carbografite?map=b/"
+               class="btn btn-outline-dark btn-sm"
+               target="_blank" rel="noopener noreferrer">
+              Distribuidores / Onde comprar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /row -->
 
   <hr class="my-5">
 
   <div class="text-center">
-    <p class="mb-3">Ainda tem dúvidas? <a href="{% url 'contato' %}" class="fw-bold">Fale com a gente</a></p>
-    <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i> ← Voltar à página inicial</a>
+    <p class="mb-3 small text-muted">
+      Dica: defina internamente quais fabricantes e distribuidores são padrão da empresa e use esta página como “catálogo de referência”.
+    </p>
+    <a href="{% url 'index' %}" class="btn btn-secondary">
+      <i class="fas fa-arrow-left me-2"></i> Voltar à página inicial
+    </a>
   </div>
-</div>
 
-{# CSS local opcional (se você prefere centralizar no CSS global, copie para seu arquivo .css) #}
-<style>
-/* ribbon "Mais popular" */
-.ribbon-popular{
-  position:absolute;
-  top:12px;
-  right:-36px;
-  transform: rotate(45deg);
-  background: #f7b500;
-  color:#222;
-  padding:6px 56px;
-  font-weight:700;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  font-size:0.85rem;
-}
-/* botão CTA mais chamativo */
-.btn-cta{
-  background: linear-gradient(90deg,#0d6efd,#0069d9);
-  border:none;
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(13,110,253,0.18);
-}
-.btn-cta:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(13,110,253,0.22);
-  text-decoration:none;
-}
-</style>
+</div>
 {% endblock content %}

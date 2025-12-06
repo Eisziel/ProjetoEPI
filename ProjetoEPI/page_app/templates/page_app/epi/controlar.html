@@ -6,67 +6,201 @@
 {% block content %}
 <div class="container py-4">
 
-    <h3 class="mb-3">
-        <i class="fa-solid fa-list-check me-2"></i>
+  {# Cabeçalho + breadcrumb #}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h3 class="mb-1">
+        <i class="fa-solid fa-list-check me-2 text-warning"></i>
         Controle de EPI
-    </h3>
-
-    <div class="card shadow-sm">
-        <div class="card-body">
-
-            <form method="post">
-                {% csrf_token %}
-                {{ form.non_field_errors }}
-
-                <div class="mb-3">
-                    <label class="form-label">Colaborador</label>
-                    {{ form.colaborador }}
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Equipamento</label>
-                    {{ form.equipamento }}
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label>Data da entrega</label>
-                        {{ form.data_entrega }}
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label>Data prevista para devolução</label>
-                        {{ form.data_prevista_devolucao }}
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label>Data devolução</label>
-                        {{ form.data_devolucao }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label>Status</label>
-                    {{ form.status }}
-                </div>
-
-                <div class="mb-3">
-                    <label>Observações</label>
-                    {{ form.observacao }}
-                </div>
-
-                <div class="mb-3">
-                    <label>Observação da devolução</label>
-                    {{ form.observacao_devolucao }}
-                </div>
-
-                <button class="btn btn-warning text-dark fw-semibold">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Salvar
-                </button>
-            </form>
-
-        </div>
+      </h3>
+      <p class="text-muted mb-0">
+        Registre a entrega e devolução de EPIs para cada colaborador.
+      </p>
     </div>
+
+    <nav aria-label="breadcrumb" class="d-none d-md-block">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <a href="{% url 'index' %}"><a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'relatorio_colaborador' %}"><a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white d-flex align-items-center">
+      <i class="fa-solid fa-helmet-safety me-2 text-warning"></i>
+      <div>
+        <h5 class="mb-0">Registro de movimentação de EPI</h5>
+        <small class="text-light-50">
+          
+        </small>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {# Erros gerais do formulário #}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        {# Seção: identificação #}
+        <h6 class="text-uppercase text-muted small mb-2">Identificação</h6>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label class="form-label" for="{{ form.colaborador.id_for_label }}">
+              Colaborador *
+            </label>
+            {{ form.colaborador }}
+            {% if form.colaborador.errors %}
+              <div class="text-danger small">
+                {{ form.colaborador.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.equipamento.id_for_label }}">
+              Equipamento *
+            </label>
+            {{ form.equipamento }}
+            {% if form.equipamento.errors %}
+              <div class="text-danger small">
+                {{ form.equipamento.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Seção: datas #}
+        <h6 class="text-uppercase text-muted small mb-2">Datas da movimentação</h6>
+        <div class="row mb-4">
+          <div class="col-md-4 mb-3">
+            <label class="form-label" for="{{ form.data_entrega.id_for_label }}">
+              Data da entrega 
+            </label>
+            {{ form.data_entrega }}
+            {% if form.data_entrega.errors %}
+              <div class="text-danger small">
+                {{ form.data_entrega.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label" for="{{ form.data_prevista_devolucao.id_for_label }}">
+              Data prevista para devolução
+            </label>
+            {{ form.data_prevista_devolucao }}
+            {% if form.data_prevista_devolucao.errors %}
+              <div class="text-danger small">
+                {{ form.data_prevista_devolucao.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label" for="{{ form.data_devolucao.id_for_label }}">
+              Data da devolução
+            </label>
+            {{ form.data_devolucao }}
+            {% if form.data_devolucao.errors %}
+              <div class="text-danger small">
+                {{ form.data_devolucao.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Seção: status #}
+        <h6 class="text-uppercase text-muted small mb-2">Situação do EPI</h6>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.status.id_for_label }}">
+
+          </label>
+          {{ form.status }}
+          {% if form.status.errors %}
+            <div class="text-danger small">
+              {{ form.status.errors|striptags }}
+            </div>
+          {% else %}
+            <div class="form-text">
+            </div>
+          {% endif %}
+        </div>
+
+        {# Seção: observações #}
+        <h6 class="text-uppercase text-muted small mb-2">Observações</h6>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.observacao.id_for_label }}">
+            Observações da entrega
+          </label>
+          {{ form.observacao }}
+          {% if form.observacao.errors %}
+            <div class="text-danger small">
+              {{ form.observacao.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label" for="{{ form.observacao_devolucao.id_for_label }}">
+            Observações da devolução
+          </label>
+          {{ form.observacao_devolucao }}
+          {% if form.observacao_devolucao.errors %}
+            <div class="text-danger small">
+              {{ form.observacao_devolucao.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <hr>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+          <a href="{% url 'relatorio_colaborador' %}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-file-lines me-1"></i> Ver relatório por colaborador
+          </a>
+
+          <div class="d-flex gap-2 justify-content-end">
+            <button type="reset" class="btn btn-light border">
+              <i class="fa-solid fa-eraser me-1"></i> Limpar
+            </button>
+            <button type="submit" class="btn btn-warning text-dark fw-semibold">
+              <i class="fa-solid fa-floppy-disk me-1"></i> Salvar movimentação
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
 
 </div>
 {% endblock %}

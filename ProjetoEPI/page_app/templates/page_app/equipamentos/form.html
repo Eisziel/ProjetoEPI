@@ -6,57 +6,176 @@
 {% block content %}
 <div class="container py-4">
 
-    <h3 class="mb-3">
-        <i class="fa-solid fa-vest-patches me-2"></i>
+  {# Cabeçalho da página + breadcrumb #}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h3 class="mb-1">
+        <i class="fa-solid fa-vest-patches me-2 text-warning"></i>
         {{ titulo }}
-    </h3>
-
-    <div class="card shadow-sm">
-        <div class="card-body">
-
-            <form method="post">
-                {% csrf_token %}
-                {{ form.non_field_errors }}
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nome</label>
-                        {{ form.nome }}
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Código</label>
-                        {{ form.codigo }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Descrição</label>
-                    {{ form.descricao }}
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">CA</label>
-                        {{ form.ca }}
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Quantidade em estoque</label>
-                        {{ form.quantidade_estoque }}
-                    </div>
-                </div>
-
-                <button class="btn btn-warning text-dark fw-semibold">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Salvar
-                </button>
-
-                <a href="{% url 'listar_equipamentos' %}" class="btn btn-secondary">
-                    <i class="fa-solid fa-arrow-left"></i> Voltar
-                </a>
-            </form>
-
-        </div>
+      </h3>
+      <p class="text-muted mb-0">
+        Cadastre e mantenha atualizado o estoque de EPIs da sua empresa.
+      </p>
     </div>
+
+    <nav aria-label="breadcrumb" class="d-none d-md-block">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <a href="{% url 'index' %}"><a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'listar_equipamentos' %}"><a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white d-flex align-items-center">
+      <i class="fa-solid fa-helmet-safety me-2 text-warning"></i>
+      <div>
+        <h5 class="mb-0"></h5>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {# Erros gerais do formulário #}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        {# Seção: dados principais #}
+        <h6 class="text-uppercase text-muted small mb-2">Dados principais</h6>
+        <div class="row mb-3">
+          <div class="col-md-7 mb-3 mb-md-0">
+            <label class="form-label" for="{{ form.nome.id_for_label }}">
+              Nome do equipamento 
+            </label>
+            {{ form.nome }}
+            {% if form.nome.errors %}
+              <div class="text-danger small">
+                {{ form.nome.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+                Ex.: Capacete de segurança, Luva de raspa, Protetor auricular…
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-5">
+            <label class="form-label" for="{{ form.codigo.id_for_label }}">
+              Código interno 
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fa-solid fa-barcode"></i>
+              </span>
+              {{ form.codigo }}
+            </div>
+            {% if form.codigo.errors %}
+              <div class="text-danger small">
+                {{ form.codigo.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+                Código usado para localizar o EPI no estoque.
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label" for="{{ form.descricao.id_for_label }}">
+            Descrição / Observações
+          </label>
+          {{ form.descricao }}
+          {% if form.descricao.errors %}
+            <div class="text-danger small">
+              {{ form.descricao.errors|striptags }}
+            </div>
+          {% else %}
+            <div class="form-text">
+              Informações adicionais: tamanhos, material, normas atendidas, etc.
+            </div>
+          {% endif %}
+        </div>
+
+        {# Seção: detalhes técnicos / estoque #}
+        <h6 class="text-uppercase text-muted small mb-2">Detalhes técnicos / estoque</h6>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="{{ form.ca.id_for_label }}">
+              CA (Certificado de Aprovação)
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fa-solid fa-id-card-clip"></i>
+              </span>
+              {{ form.ca }}
+            </div>
+            {% if form.ca.errors %}
+              <div class="text-danger small">
+                {{ form.ca.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+                Informe o número do CA válido (quando aplicável).
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="{{ form.quantidade_estoque.id_for_label }}">
+              Quantidade em estoque 
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fa-solid fa-box-open"></i>
+              </span>
+              {{ form.quantidade_estoque }}
+            </div>
+            {% if form.quantidade_estoque.errors %}
+              <div class="text-danger small">
+                {{ form.quantidade_estoque.errors|striptags }}
+              </div>
+            {% else %}
+              <div class="form-text">
+                Quantidade disponível atualmente no almoxarifado.
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+          <a href="{% url 'listar_equipamentos' %}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i> Voltar à lista
+          </a>
+
+          <div class="d-flex gap-2 justify-content-end">
+            <button type="reset" class="btn btn-light border">
+              <i class="fa-solid fa-eraser me-1"></i> Limpar
+            </button>
+            <button type="submit" class="btn btn-warning text-dark fw-semibold">
+              <i class="fa-solid fa-floppy-disk me-1"></i> Salvar equipamento
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
 </div>
 {% endblock %}

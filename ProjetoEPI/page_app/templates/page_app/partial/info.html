@@ -1,103 +1,676 @@
 {% extends "page_app/global/index.html" %}
 {% load static %}
 
-{% block title %}Nossos Serviços{% endblock title %}
+{% block title %}Recursos & Indicadores{% endblock title %}
 
 {% block content %}
-<div class="container mt-5 p-4">
-    <h1 class="mb-4 text-center fw-bold text-warning">Gestão de Equipamentos de Proteção Individual</h1>
-    <p class="lead text-center mb-5 text-secondary">
-        Nosso sistema foi desenvolvido para tornar o controle de EPIs mais eficiente, seguro e totalmente digital. 
-        Acompanhe os principais recursos que tornam sua empresa mais organizada e em conformidade com as normas de segurança.
+<div class="container py-4">
+
+  <!-- CABEÇALHO -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="fw-bold text-warning mb-1">
+        Painel de Indicadores de EPI
+      </h1>
+      <small class="text-muted">
+        Monitoramento ilustrativo de custos, segurança, produtividade e estoque.
+      </small>
+    </div>
+    <div class="mt-3 mt-md-0 d-flex gap-2 align-items-center">
+      <span class="badge bg-dark">Dados fictícios para demonstração</span>
+
+      <select id="periodoSelect" class="form-select form-select-sm w-auto">
+        <option value="6">Últimos 6 meses</option>
+        <option value="12" selected>Últimos 12 meses</option>
+        <option value="24">Últimos 24 meses</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small text-uppercase">Custo mensal de EPIs</span>
+            <i class="fa-solid fa-sack-dollar text-warning"></i>
+          </div>
+          <h3 class="fw-bold mb-1" id="kpiCusto">R$ 18.500</h3>
+          <small class="text-success" id="kpiCustoDelta">+5% vs. mês anterior</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small text-uppercase">Produtividade</span>
+            <i class="fa-solid fa-chart-line text-success"></i>
+          </div>
+          <h3 class="fw-bold mb-1" id="kpiProdutividade">93%</h3>
+          <small class="text-success" id="kpiProdutividadeDelta">+2 pts. percentuais</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small text-uppercase">Acidentes registrados</span>
+            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+          </div>
+          <h3 class="fw-bold mb-1" id="kpiAcidentes">1</h3>
+          <small class="text-success" id="kpiAcidentesDelta">-3 vs. média histórica</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small text-uppercase">Adesão ao uso de EPIs</span>
+            <i class="fa-solid fa-helmet-safety text-primary"></i>
+          </div>
+          <h3 class="fw-bold mb-1" id="kpiAdesao">94%</h3>
+          <small class="text-muted" id="kpiAdesaoDelta">Meta: &gt; 92%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLES DE CENÁRIO -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body d-flex flex-wrap justify-content-between align-items-center">
+      <div class="mb-2 mb-md-0">
+        <strong>Simular cenário:</strong>
+        <span class="text-muted small ms-1">
+          ajuste rápido dos indicadores (apenas visual, para o trabalho).
+        </span>
+      </div>
+      <div class="btn-group btn-group-sm" role="group">
+        <button type="button" class="btn btn-outline-secondary active" id="cenarioNeutroBtn">
+          Neutro
+        </button>
+        <button type="button" class="btn btn-outline-success" id="cenarioSeguroBtn">
+          Mais seguro (↓ acidentes, ↑ custo)
+        </button>
+        <button type="button" class="btn btn-outline-danger" id="cenarioRiscoBtn">
+          Mais risco (↑ acidentes, ↓ custo)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRÁFICOS PRINCIPAIS -->
+  <div class="row g-4 mb-4">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-1">
+            Evolução mensal
+          </h5>
+          <small class="text-muted">
+            Custo de EPIs, produtividade e acidentes ao longo do tempo.
+          </small>
+          <div class="mt-3" style="height: 280px;">
+            <canvas id="chartEvolucao"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-1">
+            Consumo por tipo de EPI
+          </h5>
+          <small class="text-muted">
+            Quantidade de EPIs entregues nos últimos meses.
+          </small>
+          <div class="mt-3" style="height: 260px;">
+            <canvas id="chartConsumo"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRÁFICO + ALERTAS -->
+  <div class="row g-4 mb-4">
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-1">
+            Distribuição dos acidentes
+          </h5>
+          <small class="text-muted">
+            Tipos de ocorrência registrados no período selecionado.
+          </small>
+          <div class="mt-3" style="height: 260px;">
+            <canvas id="chartAcidentes"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            Alertas & Indicadores rápidos
+          </h5>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between">
+              <span class="small fw-semibold">
+                Nível de estoque crítico
+              </span>
+              <span class="small text-muted" id="alertEstoquePercent">18% dos itens</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div id="alertEstoqueBar" class="progress-bar bg-danger" style="width: 18%;"></div>
+            </div>
+            <small class="text-muted">
+              Itens com quantidade abaixo do mínimo sugerido.
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between">
+              <span class="small fw-semibold">
+                EPIs próximos da validade
+              </span>
+              <span class="small text-muted" id="alertValidadePercent">12% do estoque</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div id="alertValidadeBar" class="progress-bar bg-warning" style="width: 12%;"></div>
+            </div>
+            <small class="text-muted">
+              Percentual de EPIs que vencem nos próximos 60 dias.
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between">
+              <span class="small fw-semibold">
+                Treinamentos concluídos
+              </span>
+              <span class="small text-muted" id="alertTreinamentoPercent">88% dos colaboradores</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div id="alertTreinamentoBar" class="progress-bar bg-success" style="width: 88%;"></div>
+            </div>
+            <small class="text-muted">
+              Colaboradores com treinamentos de segurança em dia.
+            </small>
+          </div>
+
+          <div class="mt-3 text-end">
+            <small class="text-muted">
+              Use estes números como base para decisões de reposição e treinamento.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA INTERATIVA SIMPLES -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">
+          Setores com maior consumo de EPIs
+        </h5>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-outline-secondary active" id="btnSetores">
+            Setores
+          </button>
+          <button type="button" class="btn btn-outline-secondary" id="btnFuncoes">
+            Funções
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0" id="tabelaIndicadores">
+          <thead class="table-light">
+            <tr>
+              <th>Descrição</th>
+              <th class="text-center">Consumo de EPIs (mês)</th>
+              <th class="text-center">Acidentes (12 meses)</th>
+              <th class="text-center">Adesão ao uso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="text-center mt-4">
+    <p class="mb-2 text-muted">
+      Esses indicadores são apenas uma simulação visual para o projeto.
     </p>
-
-    <hr class="mb-5">
-
-    <!-- BLOCO 1 -->
-    <div class="row featurette align-items-center mb-5">
-        <div class="col-md-7">
-            <h2 class="featurette-heading fw-semibold">
-                <span class="text-light">Cadastro Inteligente de Colaboradores</span> 
-                <span class="text-muted d-block fs-5">Organização e praticidade</span>
-            </h2>
-            <p class="mt-3">
-                Armazene e gerencie informações de cada colaborador de forma simples. 
-                Cada funcionário possui um histórico detalhado de equipamentos emprestados, devoluções e prazos.
-            </p>
-        </div>
-        <div class="col-md-5 text-center">
-            <img src="{% static 'page_app/img/colaboradores.jpg' %}" class="img-fluid rounded shadow" alt="Cadastro de colaboradores">
-        </div>
-    </div>
-
-    <!-- BLOCO 2 -->
-    <div class="row featurette align-items-center mb-5">
-        <div class="col-md-7 order-md-2">
-            <h2 class="featurette-heading fw-semibold">
-                <span class="text-light">Controle de Estoque de EPIs</span>
-                <span class="text-muted d-block fs-5">Tudo sob controle</span>
-            </h2>
-            <p class="mt-3">
-                O sistema mantém o registro de cada equipamento disponível, facilitando o acompanhamento de estoque, 
-                validade dos EPIs e reposição necessária — garantindo segurança e conformidade.
-            </p>
-        </div>
-        <div class="col-md-5 order-md-1 text-center">
-            <img src="{% static 'page_app/img/estoque.jpg' %}" class="img-fluid rounded shadow" alt="Controle de estoque de EPIs">
-        </div>
-    </div>
-
-    <!-- BLOCO 3 -->
-    <div class="row featurette align-items-center mb-5">
-        <div class="col-md-7">
-            <h2 class="featurette-heading fw-semibold">
-                <span class="text-light">Empréstimo e Devolução Rápidos</span>
-                <span class="text-muted d-block fs-5">Agilidade e rastreabilidade</span>
-            </h2>
-            <p class="mt-3">
-                Registre empréstimos e devoluções de forma prática. 
-                Cada movimentação é salva no sistema, garantindo rastreabilidade e reduzindo perdas de equipamentos.
-            </p>
-        </div>
-        <div class="col-md-5 text-center">
-            <img src="{% static 'page_app/img/emprestimo.jpg' %}" class="img-fluid rounded shadow" alt="Empréstimo de equipamentos">
-        </div>
-    </div>
-
-    <!-- BLOCO 4 -->
-    <div class="row featurette align-items-center mb-5">
-        <div class="col-md-7 order-md-2">
-            <h2 class="featurette-heading fw-semibold">
-                <span class="text-light">Relatórios e Conformidade</span>
-                <span class="text-muted d-block fs-5">Tudo dentro da norma</span>
-            </h2>
-            <p class="mt-3">
-                Gere relatórios completos sobre uso e histórico de EPIs, 
-                atendendo às exigências da <strong>NR-6</strong> e outras normas regulamentadoras de segurança do trabalho.
-            </p>
-        </div>
-        <div class="col-md-5 order-md-1 text-center">
-            <img src="{% static 'page_app/img/relatorios.jpg' %}" class="img-fluid rounded shadow" alt="Relatórios de segurança">
-        </div>
-    </div>
-
-    <!-- Call to action final -->
- <hr class="my-5">
-
- <div class="text-center py-5 bg-light rounded-3 shadow-sm mt-5">
-    <h3 class="fw-bold mb-3">Ficou interessado?</h3>
-    <p class="lead text-muted mb-4">
-        Agende uma demonstração e veja como nosso sistema pode transformar a gestão de EPIs da sua empresa!
-    </p>
- <a class="btn btn-warning btn-lg text-dark px-4 py-2 fw-semibold shadow-sm" href="{% url 'services' %}">
-            <i class="fas fa-envelope-open-text me-2"></i> Solicitar Serviços
-        </a>
-    </div>
- </div>
- <div class="text-center">
-    <p class="mb-3">Ainda tem dúvidas? <a href="{% url 'contato' %}" class="fw-bold">Fale com a gente</a></p>
-    <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i> ← Voltar à página inicial</a>
+    <a href="{% url 'contato' %}" class="btn btn-warning text-dark fw-semibold me-2">
+      <i class="fa-solid fa-circle-question me-1"></i>
+      Preciso de ajuda para interpretar
+    </a>
+    <a href="{% url 'services' %}" class="btn btn-outline-light">
+      <i class="fa-solid fa-industry me-1"></i>
+      Ver fabricantes e distribuidores
+    </a>
   </div>
 
 </div>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+(function() {
+  const periodoSelect = document.getElementById('periodoSelect');
+
+  // Cenários
+  const btnNeutro = document.getElementById('cenarioNeutroBtn');
+  const btnSeguro = document.getElementById('cenarioSeguroBtn');
+  const btnRisco = document.getElementById('cenarioRiscoBtn');
+
+  // KPIs
+  const kpiCusto = document.getElementById('kpiCusto');
+  const kpiCustoDelta = document.getElementById('kpiCustoDelta');
+  const kpiProd = document.getElementById('kpiProdutividade');
+  const kpiProdDelta = document.getElementById('kpiProdutividadeDelta');
+  const kpiAcid = document.getElementById('kpiAcidentes');
+  const kpiAcidDelta = document.getElementById('kpiAcidentesDelta');
+  const kpiAdesao = document.getElementById('kpiAdesao');
+  const kpiAdesaoDelta = document.getElementById('kpiAdesaoDelta');
+
+  // Alertas
+  const alertEstoqueBar = document.getElementById('alertEstoqueBar');
+  const alertEstoquePercent = document.getElementById('alertEstoquePercent');
+  const alertValidadeBar = document.getElementById('alertValidadeBar');
+  const alertValidadePercent = document.getElementById('alertValidadePercent');
+  const alertTreinamentoBar = document.getElementById('alertTreinamentoBar');
+  const alertTreinamentoPercent = document.getElementById('alertTreinamentoPercent');
+
+  // Tabela
+  const btnSetores = document.getElementById('btnSetores');
+  const btnFuncoes = document.getElementById('btnFuncoes');
+  const tabelaBody = document.querySelector('#tabelaIndicadores tbody');
+
+  // GERADOR DE LABELS
+  function gerarLabels(meses) {
+    const nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const labels = [];
+    for (let i = 0; i < meses; i++) {
+      labels.push(nomes[i % 12]);
+    }
+    return labels;
+  }
+
+  // DADOS BASE (ilustrativos)
+  let mesesAtual = 12;
+  let cenario = 'neutro';
+
+  function gerarDadosEvolucao() {
+    const baseCusto = 17000;
+    const baseProd = 92;
+    const baseAcid = 3;
+
+    const custo = [];
+    const prod = [];
+    const acid = [];
+
+    for (let i = 0; i < mesesAtual; i++) {
+      let fator = 1 + (i - mesesAtual/2) * 0.01;
+
+      let c = baseCusto * fator + (Math.random() - 0.5) * 1500;
+      let p = baseProd + (Math.random() - 0.5) * 4;
+      let a = baseAcid + (Math.random() - 0.5) * 2;
+
+      if (cenario === 'seguro') {
+        c *= 1.08;   // custo ↑
+        p += 2;      // produtividade ↑
+        a *= 0.5;    // acidentes ↓
+      } else if (cenario === 'risco') {
+        c *= 0.93;   // custo ↓
+        p -= 2;
+        a *= 1.5;
+      }
+
+      custo.push(Math.max(8000, Math.round(c)));
+      prod.push(Math.min(100, Math.max(75, p.toFixed(1))));
+      acid.push(Math.max(0, Math.round(a)));
+    }
+
+    return {custo, prod, acid};
+  }
+
+  function gerarDadosConsumo() {
+    // Capacete, Luvas, Óculos, Protetor auditivo, Respirador
+    let base = [220, 310, 180, 140, 90];
+    if (cenario === 'seguro') {
+      base = base.map(v => Math.round(v * 1.2));
+    } else if (cenario === 'risco') {
+      base = base.map(v => Math.round(v * 0.9));
+    }
+    return base;
+  }
+
+  function gerarDadosAcidentes() {
+    // Queda, Corte, Impacto, Ruído, Poeira
+    let base = [4, 3, 2, 1, 1];
+    if (cenario === 'seguro') {
+      base = base.map(v => Math.max(0, Math.round(v * 0.6)));
+    } else if (cenario === 'risco') {
+      base = base.map(v => Math.round(v * 1.4));
+    }
+    return base;
+  }
+
+  // CHARTS
+  const ctxEvolucao = document.getElementById('chartEvolucao');
+  const ctxConsumo = document.getElementById('chartConsumo');
+  const ctxAcidentes = document.getElementById('chartAcidentes');
+
+  const evolucaoData = gerarDadosEvolucao();
+
+  const chartEvolucao = new Chart(ctxEvolucao, {
+    type: 'line',
+    data: {
+      labels: gerarLabels(mesesAtual),
+      datasets: [
+        {
+          label: 'Custo de EPIs (R$)',
+          data: evolucaoData.custo,
+          borderWidth: 2,
+          borderColor: 'rgba(255,193,7,1)',
+          backgroundColor: 'rgba(255,193,7,0.1)',
+          tension: 0.3,
+          yAxisID: 'y'
+        },
+        {
+          label: 'Produtividade (%)',
+          data: evolucaoData.prod,
+          borderWidth: 2,
+          borderColor: 'rgba(25,135,84,1)',
+          backgroundColor: 'rgba(25,135,84,0.1)',
+          tension: 0.3,
+          yAxisID: 'y1'
+        },
+        {
+          label: 'Acidentes (nº)',
+          data: evolucaoData.acid,
+          borderWidth: 2,
+          borderColor: 'rgba(220,53,69,1)',
+          backgroundColor: 'rgba(220,53,69,0.15)',
+          tension: 0.3,
+          yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
+      plugins: {
+        legend: { position: 'bottom' }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          position: 'left',
+          ticks: {
+            callback: (value) => 'R$ ' + value.toLocaleString('pt-BR')
+          }
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: {
+            callback: (value) => value + '%'
+          }
+        },
+        y2: {
+          type: 'linear',
+          position: 'right',
+          display: false
+        }
+      },
+      animation: {
+        duration: 800,
+        easing: 'easeOutQuart'
+      }
+    }
+  });
+
+  const chartConsumo = new Chart(ctxConsumo, {
+    type: 'bar',
+    data: {
+      labels: ['Capacete', 'Luvas', 'Óculos', 'Protetor auditivo', 'Respirador'],
+      datasets: [{
+        label: 'EPIs entregues (mês)',
+        data: gerarDadosConsumo(),
+        borderWidth: 1,
+        borderColor: 'rgba(13,110,253,1)',
+        backgroundColor: 'rgba(13,110,253,0.3)'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      animation: {
+        duration: 800,
+        easing: 'easeOutQuart'
+      }
+    }
+  });
+
+  const chartAcidentes = new Chart(ctxAcidentes, {
+    type: 'doughnut',
+    data: {
+      labels: ['Queda', 'Corte', 'Impacto', 'Ruído', 'Poeira'],
+      datasets: [{
+        data: gerarDadosAcidentes(),
+        borderWidth: 1,
+        backgroundColor: [
+          'rgba(220,53,69,0.7)',
+          'rgba(255,193,7,0.7)',
+          'rgba(13,110,253,0.7)',
+          'rgba(25,135,84,0.7)',
+          'rgba(108,117,125,0.7)'
+        ]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' }
+      },
+      animation: {
+        duration: 800,
+        easing: 'easeOutQuart'
+      }
+    }
+  });
+
+  // ATUALIZA TUDO (quando muda período ou cenário)
+  function atualizarIndicadores() {
+    const dados = gerarDadosEvolucao();
+
+    chartEvolucao.data.labels = gerarLabels(mesesAtual);
+    chartEvolucao.data.datasets[0].data = dados.custo;
+    chartEvolucao.data.datasets[1].data = dados.prod;
+    chartEvolucao.data.datasets[2].data = dados.acid;
+    chartEvolucao.update();
+
+    chartConsumo.data.datasets[0].data = gerarDadosConsumo();
+    chartConsumo.update();
+
+    chartAcidentes.data.datasets[0].data = gerarDadosAcidentes();
+    chartAcidentes.update();
+
+    // KPIs (pegando último ponto das séries)
+    const ultimoCusto = dados.custo[dados.custo.length - 1];
+    const penultimoCusto = dados.custo[dados.custo.length - 2] || ultimoCusto;
+    const variacaoCusto = ((ultimoCusto - penultimoCusto) / penultimoCusto) * 100;
+
+    const ultimoProd = dados.prod[dados.prod.length - 1];
+    const penultimoProd = dados.prod[dados.prod.length - 2] || ultimoProd;
+    const variacaoProd = (ultimoProd - penultimoProd);
+
+    const ultimoAcid = dados.acid[dados.acid.length - 1];
+    const mediaAcid = dados.acid.reduce((a,b) => a + b, 0) / dados.acid.length;
+
+    kpiCusto.textContent = 'R$ ' + ultimoCusto.toLocaleString('pt-BR');
+    kpiCustoDelta.textContent = 
+      (variacaoCusto >= 0 ? '+' : '') + variacaoCusto.toFixed(1) + '% vs. mês anterior';
+    kpiCustoDelta.className = variacaoCusto >= 0 ? 'text-danger' : 'text-success';
+
+    kpiProd.textContent = ultimoProd.toFixed(1) + '%';
+    kpiProdDelta.textContent = 
+      (variacaoProd >= 0 ? '+' : '') + variacaoProd.toFixed(1) + ' pts. percentuais';
+    kpiProdDelta.className = variacaoProd >= 0 ? 'text-success' : 'text-danger';
+
+    kpiAcid.textContent = ultimoAcid;
+    const diffAcid = ultimoAcid - mediaAcid;
+    kpiAcidDelta.textContent = 
+      (diffAcid <= 0 ? '-' + Math.abs(diffAcid.toFixed(1)) : '+'+ diffAcid.toFixed(1)) +
+      ' vs. média';
+    kpiAcidDelta.className = diffAcid <= 0 ? 'text-success' : 'text-danger';
+
+    // Adesão (só ajusta um pouco com cenário)
+    let adesao = 94;
+    if (cenario === 'seguro') adesao = 96;
+    if (cenario === 'risco')  adesao = 90;
+    kpiAdesao.textContent = adesao.toFixed(0) + '%';
+    kpiAdesaoDelta.textContent = 'Meta: > 92%';
+    kpiAdesaoDelta.className = adesao >= 92 ? 'text-success' : 'text-danger';
+
+    // Alertas (só variam um pouco com cenário)
+    let estoqueCritico = 18;
+    let validade = 12;
+    let treinamento = 88;
+
+    if (cenario === 'seguro') {
+      estoqueCritico = 12;
+      validade = 8;
+      treinamento = 92;
+    } else if (cenario === 'risco') {
+      estoqueCritico = 24;
+      validade = 18;
+      treinamento = 80;
+    }
+
+    alertEstoqueBar.style.width = estoqueCritico + '%';
+    alertEstoquePercent.textContent = estoqueCritico + '% dos itens';
+
+    alertValidadeBar.style.width = validade + '%';
+    alertValidadePercent.textContent = validade + '% do estoque';
+
+    alertTreinamentoBar.style.width = treinamento + '%';
+    alertTreinamentoPercent.textContent = treinamento + '% dos colaboradores';
+  }
+
+  // TABELA INTERATIVA
+  const dadosSetores = [
+    { nome: 'Obras civis', consumo: 430, acidentes: 3, adesao: 90 },
+    { nome: 'Manutenção', consumo: 280, acidentes: 2, adesao: 95 },
+    { nome: 'Almoxarifado', consumo: 150, acidentes: 0, adesao: 98 },
+    { nome: 'Logística interna', consumo: 210, acidentes: 1, adesao: 92 }
+  ];
+
+  const dadosFuncoes = [
+    { nome: 'Pedreiro', consumo: 220, acidentes: 2, adesao: 89 },
+    { nome: 'Servente', consumo: 180, acidentes: 1, adesao: 91 },
+    { nome: 'Eletricista', consumo: 140, acidentes: 0, adesao: 97 },
+    { nome: 'Técnico de segurança', consumo: 90, acidentes: 0, adesao: 99 }
+  ];
+
+  function preencherTabela(tipo) {
+    tabelaBody.innerHTML = '';
+    const lista = tipo === 'setores' ? dadosSetores : dadosFuncoes;
+
+    lista.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${item.nome}</td>
+        <td class="text-center">${item.consumo}</td>
+        <td class="text-center">${item.acidentes}</td>
+        <td class="text-center">${item.adesao}%</td>
+      `;
+      tabelaBody.appendChild(tr);
+    });
+  }
+
+  // Eventos de período
+  if (periodoSelect) {
+    periodoSelect.addEventListener('change', function() {
+      mesesAtual = parseInt(this.value);
+      atualizarIndicadores();
+    });
+  }
+
+  // Eventos de cenário
+  function setCenario(novo) {
+    cenario = novo;
+    [btnNeutro, btnSeguro, btnRisco].forEach(btn => btn.classList.remove('active'));
+
+    if (cenario === 'neutro') btnNeutro.classList.add('active');
+    if (cenario === 'seguro') btnSeguro.classList.add('active');
+    if (cenario === 'risco')  btnRisco.classList.add('active');
+
+    atualizarIndicadores();
+  }
+
+  btnNeutro.addEventListener('click', () => setCenario('neutro'));
+  btnSeguro.addEventListener('click', () => setCenario('seguro'));
+  btnRisco.addEventListener('click', () => setCenario('risco'));
+
+  // Eventos tabela
+  btnSetores.addEventListener('click', () => {
+    btnSetores.classList.add('active');
+    btnFuncoes.classList.remove('active');
+    preencherTabela('setores');
+  });
+
+  btnFuncoes.addEventListener('click', () => {
+    btnFuncoes.classList.add('active');
+    btnSetores.classList.remove('active');
+    preencherTabela('funcoes');
+  });
+
+  // Inicialização
+  preencherTabela('setores');
+  atualizarIndicadores();
+
+  // Pequena animação contínua (leve) para dar “vida” ao dashboard
+  setInterval(() => {
+    atualizarIndicadores();
+  }, 8000);
+
+})();
+</script>
+
+<style>
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    transition: 0.15s ease-in-out;
+    box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.12);
+  }
+</style>
 {% endblock content %}

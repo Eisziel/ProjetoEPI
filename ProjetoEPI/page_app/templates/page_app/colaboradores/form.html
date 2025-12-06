@@ -1,25 +1,72 @@
-{% extends "page_app/global/base.html" %}
+{% extends "page_app/global/index.html" %}
 {% load static %}
 
 {% block title %}{{ titulo }}{% endblock %}
 
 {% block content %}
-<div class="container py-5 mt-5">
+<div class="container py-4">
   <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow-sm">
-        <div class="card-body p-4">
-          <h3 class="mb-4 text-center">{{ titulo }}</h3>
+    <div class="col-lg-8 col-xl-7">
 
-          <form method="POST">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white d-flex align-items-center">
+          <i class="fa-solid fa-user-helmet-safety me-2 text-warning"></i>
+          <h5 class="mb-0">{{ titulo }}</h5>
+        </div>
+
+        <div class="card-body p-4">
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary w-100 mt-2">Salvar</button>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Nome completo</label>
+                {{ form.nome }}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">E-mail</label>
+                {{ form.email }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Telefone</label>
+                {{ form.telefone }}
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Função / Cargo</label>
+                {{ form.funcao }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Observações</label>
+              {{ form.observacao }}
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+              <a href="{% url 'listar_colaboradores' %}" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left me-1"></i> Voltar
+              </a>
+
+              <button type="submit" class="btn btn-warning text-dark fw-semibold">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Salvar
+              </button>
+            </div>
           </form>
         </div>
+
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
-

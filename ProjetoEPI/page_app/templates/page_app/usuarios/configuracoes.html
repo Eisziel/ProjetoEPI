@@ -1,52 +1,149 @@
-{% extends "page_app/global/base.html" %}
+{% extends "page_app/global/index.html" %}
 {% load static %}
 
 {% block title %}Configurações da Conta{% endblock title %}
 
 {% block content %}
 <div class="container py-4">
+
   <div class="row justify-content-center">
-    <div class="col-lg-6 col-md-8">
+    <div class="col-lg-7 col-md-9">
 
       <div class="card shadow-sm border-0">
-        <div class="card-header bg-warning text-dark">
-          <h5 class="mb-0">
-            <i class="fa-solid fa-sliders me-2"></i>
-            Configurações da Conta
-          </h5>
+
+        <!-- Cabeçalho -->
+        <div class="card-header bg-dark text-white d-flex align-items-center">
+          <i class="fa-solid fa-sliders me-2 text-warning"></i>
+          <h5 class="mb-0">Configurações da Conta</h5>
         </div>
-        <div class="card-body">
 
-          <p class="text-muted">
-            Esta tela é ilustrativa para o trabalho, mostrando como seria uma área
-            de configurações de usuário (sem necessidade de salvar de verdade).
-          </p>
+        <div class="card-body px-4">
 
-          <dl class="row">
-            <dt class="col-sm-4">Nome</dt>
-            <dd class="col-sm-8">{{ usuario.nome }}</dd>
+          <!-- Navegação em Abas -->
+          <ul class="nav nav-tabs mb-4" id="configTabs" role="tablist">
 
-            <dt class="col-sm-4">E-mail</dt>
-            <dd class="col-sm-8">{{ usuario.email }}</dd>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="perfil-tab" data-bs-toggle="tab"
+                      data-bs-target="#perfil" type="button" role="tab">
+                <i class="fa-solid fa-user-gear me-1"></i> Dados pessoais
+              </button>
+            </li>
 
-            <dt class="col-sm-4">Usuário</dt>
-            <dd class="col-sm-8">{{ usuario.username }}</dd>
-          </dl>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="foto-tab" data-bs-toggle="tab"
+                      data-bs-target="#foto" type="button" role="tab">
+                <i class="fa-solid fa-image me-1"></i> Foto de perfil
+              </button>
+            </li>
 
-          <hr>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="senha-tab" data-bs-toggle="tab"
+                      data-bs-target="#senha" type="button" role="tab">
+                <i class="fa-solid fa-lock me-1"></i> Alterar senha
+              </button>
+            </li>
 
-          <div class="alert alert-info small">
-            Aqui poderiam existir campos para trocar senha, alterar foto,
-            atualizar dados pessoais, etc. Para o projeto, a exibição estática já atende ao requisito.
+          </ul>
+
+          <!-- Conteúdo das Abas -->
+          <div class="tab-content" id="configTabsContent">
+
+            <!-- ABA 1 - Dados pessoais -->
+            <div class="tab-pane fade show active" id="perfil" role="tabpanel">
+
+              <form>
+                <div class="mb-3">
+                  <label class="form-label">Nome completo</label>
+                  <input type="text" class="form-control"
+                         value="{{ usuario.nome }}" disabled>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">E-mail</label>
+                  <input type="email" class="form-control"
+                         value="{{ usuario.email }}" disabled>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Nome de usuário</label>
+                  <input type="text" class="form-control"
+                         value="{{ usuario.username }}" disabled>
+                </div>
+
+                <div class="alert alert-info small mt-3">
+                  Estes campos estão apenas para exibição no projeto, sem função de edição.
+                </div>
+              </form>
+            </div>
+
+            <!-- ABA 2 – Foto do usuário -->
+            <div class="tab-pane fade" id="foto" role="tabpanel">
+
+              <div class="text-center mb-3">
+                <img src="{% static 'page_app/img/usuario_fake.jpg' %}"
+                     alt="Foto atual"
+                     width="120" height="120"
+                     class="rounded-circle shadow-sm mb-3">
+
+                <p class="text-muted small">
+                  A foto de perfil também é ilustrativa.
+                </p>
+              </div>
+
+              <form>
+                <div class="mb-3">
+                  <label class="form-label">Selecionar nova foto</label>
+                  <input class="form-control" type="file" disabled>
+                </div>
+
+                <button class="btn btn-secondary w-100 mt-2" disabled>
+                  <i class="fa-solid fa-upload me-1"></i> Enviar foto (simulação)
+                </button>
+
+                <div class="alert alert-info small mt-3">
+                  Upload desativado por ser apenas simulação para o trabalho.
+                </div>
+              </form>
+            </div>
+
+            <!-- ABA 3 – Alterar senha -->
+            <div class="tab-pane fade" id="senha" role="tabpanel">
+
+              <form>
+                <div class="mb-3">
+                  <label class="form-label">Senha atual</label>
+                  <input type="password" class="form-control" disabled>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Nova senha</label>
+                  <input type="password" class="form-control" disabled>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Confirmar nova senha</label>
+                  <input type="password" class="form-control" disabled>
+                </div>
+
+                <button class="btn btn-warning text-dark w-100 fw-semibold" disabled>
+                  <i class="fa-solid fa-key me-1"></i> Alterar senha (simulação)
+                </button>
+
+                <div class="alert alert-info small mt-3">
+                  Os campos de senha são apenas demonstrativos.
+                </div>
+              </form>
+            </div>
+
           </div>
 
-          <div class="d-flex justify-content-between mt-3">
+          <!-- Footer -->
+          <div class="d-flex justify-content-between mt-4">
             <a href="{% url 'perfil_usuario' %}" class="btn btn-outline-secondary">
-              <i class="fa-solid fa-user me-1"></i> Voltar ao perfil
+              <i class="fa-solid fa-arrow-left-long me-1"></i> Voltar ao perfil
             </a>
 
-            <!-- 🔥 Correção aqui: trocar 'logout' por 'logout_usuario' -->
-            <a href="{% url 'logout_usuario' %}" class="btn btn-danger">
+            <a href="{% url 'logout_usuario' %}" class="btn btn-danger fw-semibold">
               <i class="fa-solid fa-right-from-bracket me-1"></i> Sair da conta
             </a>
           </div>
@@ -56,5 +153,6 @@
 
     </div>
   </div>
+
 </div>
 {% endblock content %}
